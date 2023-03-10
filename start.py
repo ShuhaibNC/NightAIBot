@@ -1,5 +1,8 @@
-from pyrogram import Client
+from pyrogram import *
 import config
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 plugins = dict(root='plugins')
 
@@ -10,3 +13,4 @@ Client(
     bot_token=config.BOT_TOKEN,
     plugins=plugins
 ).run()
+idle()
