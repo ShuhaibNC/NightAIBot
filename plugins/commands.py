@@ -74,8 +74,7 @@ async def aitext(client, message):
         "n": 1,
         "stop": None,
         "top_p": 0.3,
-        "frequency_penalty": 0.5,
-    }
+        "frequency_penalty": 0.5, }
                 
                 response = (await http.post("https://api.openai.com/v1/completions", headers=headers, json=json_data)).json()
                 await client.send_chat_action(message.chat.id, enums.ChatAction.TYPING)
