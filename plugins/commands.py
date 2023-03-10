@@ -4,14 +4,8 @@ from pyrogram.types import *
 import time
 import Script
 import config
-import openai
 from what import *
 import asyncio
-
-openai.api_key = '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'
-model = "text-davinci-002"
-temperature = 0.7
-max_tokens = 100
 
 #ping
 @Client.on_message(filters.command('ping') & filters.incoming)
