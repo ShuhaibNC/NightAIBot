@@ -100,3 +100,5 @@ async def cb_handler(client: Client, query: CallbackQuery ):
                         await pn.edit(f'Pong!\n{elapsed_time:.3f}ms', reply_markup=reply_markup)
                     elif query.data == 'id_refresh':
                         await query.message.edit_text('Okay Refreshed. Now what?')
+                    elif query.data == 'ai':
+                        await query.answer('Coming soon... 🌚', show_alert=True)
