@@ -1,36 +1,12 @@
+#pylint:disable=E0602
 #pylint:disable=E0401
 import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 import time
 import config
-import requests
-import random
-import string
 import Script
-import re
-
-def gen_pass():
-        adjresp = requests.get("https://gist.githubusercontent.com/hugsy/8910dc78d208e40de42deb29e62df913/raw/eec99c5597a73f6a9240cab26965a8609fa0f6ea/english-adjectives.txt")
-        adj = random.choice(adjresp.text.split('\n'))
-        nounresp = requests.get("https://raw.githubusercontent.com/hugsy/stuff/main/random-word/english-nouns.txt")
-        noun = random.choice(nounresp.text.split("\n"))
-        num = str(random.randrange(100))
-        punct = random.choice(string.punctuation)
-        passw = adj + noun + num + punct
-        return passw
-        
-def covid():
-    url = 'https://api.covid19api.com/world/total'
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        total_cases = data['TotalConfirmed']
-        return total_cases
-    else:
-        return 'Error retrieving data'
-
-
+from funcs import *
 
 #callback handle
 @Client.on_callback_query()
@@ -44,7 +20,7 @@ async def cb_handler(client: Client, query: CallbackQuery ):
                             InlineKeyboardButton('🔐 ᴄʟᴏꜱᴇ', callback_data='close')]
                         ]
                         reply_markup = InlineKeyboardMarkup(button)
-                        await query.message.edit_text(text=Script.HELP_TEXT.format(query.from_user.mention), reply_markup=reply_markup)
+                        await query.message.edit_reply_markup(reply_markup)
                     #close
                     elif query.data == 'close':
                         await query.message.delete()
@@ -80,13 +56,13 @@ async def cb_handler(client: Client, query: CallbackQuery ):
                         await pw.delete()
                     #covid
                     elif query.data == 'covid':
+                        await query.answer('Fetching...')
                         fd = await query.message.reply('Fetching data....')
-                        await query.answer('Fetching')
                         button = [
                             [InlineKeyboardButton('❌ ᴄʟᴏꜱᴇ', callback_data='close')]
                         ]
                         reply_markup = InlineKeyboardMarkup(button)
-                        await fd.edit(f'Total Confirmed 🦠: {covid()}', reply_markup=reply_markup)
+                        await fd.edit(f'<b>Total Confirmed 🦠</b>: <code>{covid()}</code>', reply_markup=reply_markup)
                     #ping
                     elif query.data == 'ping':
                         button = [

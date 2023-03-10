@@ -1,3 +1,4 @@
+#pylint:disable=E0602
 #pylint:disable=E0401
 from pyrogram import *
 from pyrogram.types import *
@@ -6,6 +7,7 @@ import Script
 import config
 from what import *
 import asyncio
+from funcs import *
 
 #ping
 @Client.on_message(filters.command('ping') & filters.incoming)
@@ -17,7 +19,7 @@ async def ping(client, message):
                 await m.edit(f'Pong!\n{elapsed_time:.3f}ms')
                 
 #start
-@Client.on_message(filters.command('start') & filters.incoming)
+@Client.on_message(filters.command('start') & filters.incoming & filters.group)
 async def start(client, message):
                 #thunder =await message.reply('⚡')
                 #await asyncio.sleep(2)
@@ -50,6 +52,8 @@ async def whois(client, message):
 
 @Client.on_message(filters.command('ai'))
 async def aitext(client, message):
+                if len(message.command) < 2:
+                    return await message.reply("“There are endless possibilities 🌌”\n        ~MidjourneyAI")
                 cmd = ''
                 for i in message.command:
                     if i == message.command[0]:
@@ -85,3 +89,18 @@ async def echofunc(client, message):
                         continue
                     r_txt = r_txt + i +  ' '
                 await message.reply_text(r_txt)
+
+@Client.on_message(filters.command('run') & filters.incoming)
+async def run(client, message):
+                if len(message.command) < 2:
+                    return await message.reply('Example: /run print("Hello")')
+                cmd = ''
+                for i in message.command:
+                    if i == message.command[0]:
+                        continue
+                    cmd = cmd + i + ' '
+                try:
+                    await message.reply_text(f'Output:\n<code>{run_code({cmd})}</code>')
+                except Exception as e:
+                    await message.reply(f'An error occured.\n\n{e}')
+                #await message.reply_text(f'Output:\n<code>{exec(message.text)}</code>')

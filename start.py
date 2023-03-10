@@ -1,3 +1,4 @@
+#pylint:disable=E0401
 from pyrogram import *
 import config
 import logging
@@ -13,4 +14,3 @@ Client(
     bot_token=config.BOT_TOKEN,
     plugins=plugins
 ).run()
-idle()
