@@ -6,7 +6,6 @@ import string
 
 def run_code(code):
     output = io.StringIO()
-    code = f'print({code})'
     try:
         with redirect_stdout(output):
             exec(code)

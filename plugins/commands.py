@@ -103,4 +103,4 @@ async def run(client, message):
                     await message.reply_text(f'Output:\n<code>{run_code({cmd})}</code>')
                 except Exception as e:
                     await message.reply(f'An error occured.\n\n{e}')
-                #await message.reply_text(f'Output:\n<code>{exec(message.text)}</code>')
+                #await message.reply_text(f'Output:\n<code>{exec(message.tex{t)}</code>')
