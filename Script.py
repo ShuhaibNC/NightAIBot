@@ -18,5 +18,10 @@ ID_TEXT = """
 <b>ᴄʜᴀᴛɪᴅ</b>: <code>{}</code>
 """
 
-#OPENAI_API = "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"
-#OPENAI_API = "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"
+STATS_TXT = """
+<b>👥 Users:</b> <code>{}</code>
+<b>📟 CPU:</b> <code>{}</code>
+<b>🕹️ RAM:</b> <code>{}GB/{}GB</code>
+<b>📂 Storage:</b> <code>{}GB/{}GB</code>
+<b>⚡ Uptime:</b> <code>{}</code>
+"""

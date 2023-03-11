@@ -8,6 +8,8 @@ import config
 from what import *
 import asyncio
 from funcs import *
+import psutil
+import subprocess
 
 #ping
 @Client.on_message(filters.command('ping') & filters.incoming)
@@ -49,6 +51,8 @@ async def whois(client, message):
                         ]
                 reply_markup = InlineKeyboardMarkup(button)
                 await message.reply_text(Script.ID_TEXT.format(first, last, username, id, dc, chatid), reply_markup=reply_markup)
+                
+                
 
 @Client.on_message(filters.command('ai'))
 async def aitext(client, message):
@@ -81,6 +85,8 @@ async def aitext(client, message):
                     await client.send_message(message.chat.id, response["choices"][0]["text"], reply_to_message_id=message.id)
                 except KeyError:
                     await client.send_message(message.chat.id, response['error']['message'], reply_to_message_id=message.chat.id)
+                    
+                    
 @Client.on_message(filters.command('echo') & filters.text)
 async def echofunc(client, message):
                 if len(message.command) < 2:
@@ -91,6 +97,7 @@ async def echofunc(client, message):
                         continue
                     r_txt = r_txt + i +  ' '
                 await message.reply_text(r_txt)
+                
 
 @Client.on_message(filters.command('run') & filters.incoming)
 async def run(client, message):
@@ -106,4 +113,15 @@ async def run(client, message):
                     await client.send_message(message.chat.id, f'Output:\n<code>{out}</code>', reply_to_message_id=message.chat.id)
                 except Exception as e:
                     await message.reply(f'An error occured.\n\n{e}')
-                #await message.reply_text(f'Output:\n<code>{exec(message.tex{t)}</code>')
+                    
+@Client.on_message(filters.command('stats') & filters.incoming)
+async def stats(client, message):
+                cpu_usage = psutil.cpu_percent()
+                storage = psutil.disk_usage('/')
+                storage_usage = storage.used / (1024 ** 3)
+                total_storage = storage.total / (1024 ** 3)
+                ram = psutil.virtual_memory()
+                ram_usage = ram.used / (1024 ** 3)
+                total_ram = ram.total / (1024 ** 3)
+                uptime = subprocess.check_output(['uptime', '-p']).decode().strip()
+                await message.reply(Script.STATS_TXT.format('', cpu_usage, ram_usage, ram, storage_usage, total_storage, uptime), message.chat.id)
