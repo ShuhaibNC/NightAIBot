@@ -1,6 +1,9 @@
 #pylint:disable=E0401
 from pyrogram import *
 import config
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 plugins = dict(root='plugins')
 
