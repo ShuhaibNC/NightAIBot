@@ -3,3 +3,4 @@ tgcrypto
 requests
 aiohttp
 httpx[http2]
+psutil
