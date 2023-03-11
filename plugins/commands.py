@@ -4,6 +4,7 @@ from pyrogram import *
 from pyrogram.types import *
 import time
 import Script
+import requests
 import config
 from what import *
 import asyncio
