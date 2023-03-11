@@ -121,7 +121,7 @@ async def stats(client, message):
                 storage = psutil.disk_usage('/')
                 storage_usage = storage.used / 1024
                 total_storage = storage.total / 1024
-                ram = psutil.virtual_memory() / 1024
+                ram = psutil.virtual_memory()
                 ram_usage = ram.used / (1024 ** 3)
                 total_ram = ram.total / (1024 ** 3)
                 uptime = subprocess.check_output(['uptime', '-p']).decode().strip('up').strip()
