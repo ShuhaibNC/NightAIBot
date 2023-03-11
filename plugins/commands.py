@@ -53,7 +53,7 @@ async def whois(client, message):
 @Client.on_message(filters.command('ai'))
 async def aitext(client, message):
                 if len(message.command) < 2:
-                    return await message.reply("“There are endless possibilities 🌌”\n        ~MidjourneyAI")
+                    return await message.reply("There are endless possibilities 🌌\n                         -MidjourneyAI")
                 cmd = ''
                 for i in message.command:
                     if i == message.command[0]:
@@ -83,6 +83,8 @@ async def aitext(client, message):
                     await client.send_message(message.chat.id, response['error']['message'], reply_to_message_id=message.chat.id)
 @Client.on_message(filters.command('echo') & filters.text)
 async def echofunc(client, message):
+                if len(message.command) < 2:
+                    return await message.reply('<b>Example:</b>\n<code>/echo Who are you?</code>', )
                 r_txt = ''
                 for i in message.command:
                     if i == message.command[0]:
@@ -93,7 +95,7 @@ async def echofunc(client, message):
 @Client.on_message(filters.command('run') & filters.incoming)
 async def run(client, message):
                 if len(message.command) < 2:
-                    return await message.reply('Example: /run print("Hello")', )
+                    return await message.reply('<b>Example:</b>\n<code>/run print("Hello")</code>', )
                 cmd = ''
                 for i in message.command:
                     if i == message.command[0]:
