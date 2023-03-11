@@ -82,6 +82,7 @@ async def aitext(client, message):
                     await client.send_message(message.chat.id, response["choices"][0]["text"], reply_to_message_id=message.id)
                 except KeyError:
                     await client.send_message(message.chat.id, response['error']['message'], reply_to_message_id=message.chat.id)
+
 @Client.on_message(filters.command('echo') & filters.text)
 async def echofunc(client, message):
                 if len(message.command) < 2:
