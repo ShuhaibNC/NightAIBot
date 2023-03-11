@@ -20,8 +20,8 @@ ID_TEXT = """
 
 STATS_TXT = """
 <b>👥 Users:</b> <code>{}</code>
-<b>📟 CPU:</b> <code>{}</code>
+<b>📟 CPU:</b> <code>{}%</code>
 <b>🕹️ RAM:</b> <code>{}GB/{}GB</code>
-<b>📂 Storage:</b> <code>{}GB/{}GB</code>
+<b>📂 Storage:</b> <code>{}MB/{}MB</code>
 <b>⚡ Uptime:</b> <code>{}</code>
 """
