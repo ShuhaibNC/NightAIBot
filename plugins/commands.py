@@ -125,4 +125,4 @@ async def stats(client, message):
                 ram_usage = ram.used / (1024 ** 3)
                 total_ram = ram.total / (1024 ** 3)
                 uptime = subprocess.check_output(['uptime', '-p']).decode().strip('up').strip()
-                await message.reply(Script.STATS_TXT.format(users, cpu_usage, f'{ram_usage:.2f}', f'{ram:.2f}', f'{storage_usage:.2f}', f'{total_storage:.2f}', uptime), message.chat.id)
+                await message.reply(Script.STATS_TXT.format(users, cpu_usage, ram_usage, ram, storage_usage, total_storage, uptime), message.chat.id)
