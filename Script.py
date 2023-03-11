@@ -13,7 +13,7 @@ ID_TEXT = """
 <b>ꜰɪʀꜱᴛɴᴀᴍᴇ</b>: <code>{}</code>
 <b>ʟᴀꜱᴛɴᴀᴍᴇ</b>: <code>{}</code>
 <b>ᴜꜱᴇʀɴᴀᴍᴇ</b>: <code>{}</code>
-<b>ɪᴅ</b>: <code>{}<code>
+<b>ɪᴅ</b>: <code>{}</code>
 <b>ᴅᴀᴛᴀᴄᴇɴᴛᴇʀ</b>: <code>{}</code>
 <b>ᴄʜᴀᴛɪᴅ</b>: <code>{}</code>
 """

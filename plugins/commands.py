@@ -19,7 +19,7 @@ async def ping(client, message):
                 await m.edit(f'Pong!\n{elapsed_time:.3f}ms')
                 
 #start
-@Client.on_message(filters.command('start') & filters.incoming & filters.group)
+@Client.on_message(filters.command('start') & filters.incoming)
 async def start(client, message):
                 #thunder =await message.reply('⚡')
                 #await asyncio.sleep(2)
