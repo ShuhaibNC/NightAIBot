@@ -27,7 +27,7 @@ async def start(client, message):
                 #await asyncio.sleep(2)
                 #await thunder.delete()
                 button = [
-                [InlineKeyboardButton('ʜᴇʟᴩ 🌌', callback_data='help')]
+                [InlineKeyboardButton('ᴍᴇɴᴜ 🌌', callback_data='help')]
                 ]
                 reply_markup = InlineKeyboardMarkup(button)
                 await message.reply(Script.START_TEXT, reply_markup=reply_markup, quote=True)
