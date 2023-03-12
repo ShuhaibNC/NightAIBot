@@ -3,6 +3,7 @@ from contextlib import redirect_stdout, redirect_stderr
 import requests
 import random
 import string
+import json
 
 def run_code(code):
     output = io.StringIO()
@@ -35,3 +36,16 @@ def covid():
         return total_cases
     else:
         return 'Error retrieving data'
+        
+def eemoji(text):
+    url = 'https://levanter.onrender.com/emoji?q='
+    respo = requests.get(url + text)
+    image = json.loads(respo.content)
+    
+    return image['url']
+    
+def emix(text):
+    url = 'https://levanter.onrender.com/emix?q='
+    response = requests.get(url+text)
+    data = json.loads(response.content)
+    return data['result']

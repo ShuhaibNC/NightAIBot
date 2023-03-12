@@ -126,3 +126,20 @@ async def stats(client, message):
                 total_ram = ram.total / (1024 ** 3)
                 uptime = subprocess.check_output(['uptime', '-p']).decode().strip('up').strip()
                 await message.reply(Script.STATS_TXT.format(users, cpu_usage, ram_usage, ram, storage_usage, total_storage, uptime), message.chat.id)
+
+@Client.on_message(filters.command('emoji') & filters.incoming)
+async def cmdemoji(client, message):
+    if len(message.command) < 2:
+        return await message.reply('Example:\n<code>/emoji 🌚</code>')
+    await client.send_chat_action(message.chat.id, enums.ChatAction.UPLOAD_PHOTO)
+    text = message.command[1]
+    #text : Message = await client.listen(message.chat.id)
+    await message.reply_photo(photo=eemoji(text))
+    
+@Client.on_message(filters.command('emix') & filters.incoming)
+async def myemix(client, message):
+    if len(message.command) < 2:
+        return await message.reply('Example:\n<code>/emix 🌚</code>')
+    await client.send_chat_action(message.chat.id, enums.ChatAction.UPLOAD_PHOTO)
+    text = message.command[1]
+    await message.reply_photo(photo=emix(text))

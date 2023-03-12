@@ -37,6 +37,7 @@ async def cb_handler(client: Client, query: CallbackQuery ):
                             [InlineKeyboardButton(' 🔑 PassGen', callback_data='pass_gen')],
                             [InlineKeyboardButton('🦠 Covid', callback_data='covid')],
                             [InlineKeyboardButton('📍 Ping', callback_data='ping')],
+                            [InlineKeyboardButton('🌚 Emoji to Image',url='https://t.me/NightAIBot?emoji')],
                             [InlineKeyboardButton('🖥️ AI',callback_data='ai')],
                             [InlineKeyboardButton('🔙 Back',
                             callback_data='help')]
@@ -74,7 +75,11 @@ async def cb_handler(client: Client, query: CallbackQuery ):
                         end_time = time.time()
                         elapsed_time = (end_time - start_time) * 1000
                         await pn.edit(f'Pong!\n{elapsed_time:.3f}ms', reply_markup=reply_markup)
+                        
+                        
                     elif query.data == 'id_refresh':
                         await query.message.edit_text('Okay Refreshed. Now what?')
+                        
+                        
                     elif query.data == 'ai':
                         await query.answer('Coming soon... 🌚', show_alert=True)
