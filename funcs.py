@@ -1,9 +1,34 @@
+# (c) ShuhaibNC
+
 import io
 from contextlib import redirect_stdout, redirect_stderr
 import requests
 import random
 import string
 import json
+import bs4
+
+def msonescrap(query, key):
+    resultlist = []
+    if " " in query:
+        query = query.replace(' ', '+')
+    resp = requests.get('https://malayalamsubtitles.org/?s='+query)
+    soup = bs4.BeautifulSoup(resp.content, 'html.parser')
+    if key == 'link':
+        title_links = soup.find_all('a', class_='entry-title-link')
+        for links in title_links:
+            resultlist.append(links['href'])
+        if not resultlist:
+            return 'Nothing'
+        else: return resultlist
+    elif key == 'title':
+        total_titles = soup.find_all('a', class_='entry-title-link')
+        for titles in total_titles:
+            resultlist.append(titles.get_text())
+        if not resultlist:
+            return 'Nothing'
+        else:
+            return resultlist
 
 def run_code(code):
     output = io.StringIO()

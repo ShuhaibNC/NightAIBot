@@ -1,3 +1,5 @@
+# (c) ShuhaibNC
+
 #pylint:disable=E0602
 #pylint:disable=E0401
 import asyncio

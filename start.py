@@ -1,3 +1,5 @@
+# (c) ShuhaibNC
+
 #pylint:disable=E0401
 from pyrogram import *
 import config

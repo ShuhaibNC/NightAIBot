@@ -1,3 +1,5 @@
+# (c) ShuhaibNC
+
 #pylint:disable=E0602
 #pylint:disable=E0401
 from pyrogram import *
@@ -144,3 +146,23 @@ async def myemix(client, message):
 async def cat(client, message):
     await client.send_chat_action(message.chat.id, enums.ChatAction.UPLOAD_PHOTO)
     await message.reply_photo(photo=catimage())
+    
+@Client.on_message(filters.command('msone') & filters.incoming)
+async def msone(client, message):
+    if len(message.command) < 2:
+        return await message.reply('<b>Example:</b>\n<code>/msone Thor</code>')
+    res = await message.reply('Searching...', quote=True)
+    cmd = message.text.split(' ', 1)[1]
+    buttons = []
+    names = msonescrap(cmd, 'title')
+    links = msonescrap(cmd, 'link')
+    if names == 'Nothing' or links == 'Nothing':
+        return await res.edit('No results found.')
+    
+    i = 0
+    while i < len(names):
+        buttons.append([InlineKeyboardButton(names[i], url= links[i])])
+        i += 1
+    buttons.append([InlineKeyboardButton('❌ CLOSE', callback_data='close')])
+    markup = InlineKeyboardMarkup(buttons)
+    await res.edit('Here is your result.', reply_markup=markup)
