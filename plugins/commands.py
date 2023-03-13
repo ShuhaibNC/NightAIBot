@@ -143,3 +143,8 @@ async def myemix(client, message):
     await client.send_chat_action(message.chat.id, enums.ChatAction.UPLOAD_PHOTO)
     text = message.command[1]
     await message.reply_photo(photo=emix(text))
+    
+@Client.on_message(filters.command('cat') & filters.incoming)
+async def cat(client, message):
+    await client.send_chat_action(message.chat.id, enums.ChatAction.UPLOAD_PHOTO)
+    await message.reply_photo(photo=catimage())
