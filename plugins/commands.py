@@ -103,14 +103,10 @@ async def echofunc(client, message):
 async def run(client, message):
                 if len(message.command) < 2:
                     return await message.reply('<b>Example:</b>\n<code>/run print("Hello")</code>', )
-                cmd = ''
-                for i in message.command:
-                    if i == message.command[0]:
-                        continue
-                    cmd = cmd + i + ' '
+                cmd = message.text.split(' ', 1)[1]
                 try:
                     out = run_code(cmd)
-                    await client.send_message(message.chat.id, f'Output:\n<code>{out}</code>', reply_to_message_id=message.chat.id)
+                    await message.reply(f'Output:\n<code>{out}</code>', quote=True)
                 except Exception as e:
                     await message.reply(f'An error occured.\n\n{e}')
                     

@@ -7,15 +7,10 @@ import json
 
 def run_code(code):
     output = io.StringIO()
-    try:
-        with redirect_stdout(output):
-            exec(code)
-            result = output.getvalue().strip()
-    except Exception as e:
-        with redirect_stderr(output):
-            exec(code)
-            result = output.getvalue().strip()
-    return result
+    with redirect_stdout(output):
+        exec(code)
+        result = output.getvalue().strip()
+        return result
     
 def gen_pass():
         adjresp = requests.get("https://gist.githubusercontent.com/hugsy/8910dc78d208e40de42deb29e62df913/raw/eec99c5597a73f6a9240cab26965a8609fa0f6ea/english-adjectives.txt")
