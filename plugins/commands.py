@@ -137,7 +137,7 @@ async def cmdemoji(client, message):
 @Client.on_message(filters.command('emix') & filters.incoming)
 async def myemix(client, message):
     if len(message.command) < 2:
-        return await message.reply('Example:\n<code>/emix 🌚</code>')
+        return await message.reply('Example:\n<code>/emix 😁😄</code>')
     await client.send_chat_action(message.chat.id, enums.ChatAction.UPLOAD_PHOTO)
     text = message.command[1]
     await message.reply_photo(photo=emix(text))
