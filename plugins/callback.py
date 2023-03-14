@@ -39,7 +39,7 @@ async def cb_handler(client: Client, query: CallbackQuery ):
                             [InlineKeyboardButton(' 🔑 PassGen', callback_data='pass_gen')],
                             [InlineKeyboardButton('🦠 Covid', callback_data='covid')],
                             [InlineKeyboardButton('📍 Ping', callback_data='ping')],
-                            [InlineKeyboardButton('🌚 Emoji to Image',url='https://t.me/NightAIBot?emoji')],
+                            [InlineKeyboardButton('🌚 Emoji to Image',url='https://t.me/NightAiBot?start=emoji')],
                             [InlineKeyboardButton('🖥️ AI',callback_data='ai')],
                             [InlineKeyboardButton('🔙 Back',
                             callback_data='help')]
