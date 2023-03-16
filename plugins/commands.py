@@ -158,11 +158,22 @@ async def msone(client, message):
     links = msonescrap(cmd, 'link')
     if names == 'Nothing' or links == 'Nothing':
         return await res.edit('No results found.')
-    
     i = 0
+    bu_list = []
     while i < len(names):
-        buttons.append([InlineKeyboardButton(names[i], url= links[i])])
-        i += 1
+        if names[i] in bu_list:
+            await message.reply('Removing...')
+            i += 1
+            pass
+        else:
+            buttons.append([InlineKeyboardButton(names[i], url= links[i])])
+            bu_list.append(names[i])
+            i += 1
+            await message.reply(bu_list)
     buttons.append([InlineKeyboardButton('❌ CLOSE', callback_data='close')])
     markup = InlineKeyboardMarkup(buttons)
     await res.edit('Here is your result.', reply_markup=markup)
+    
+@Client.on_message(filters.command('thanos') & filters.incoming)
+async def thanos(client, message):
+    await message.reply(get_thanosquote())
