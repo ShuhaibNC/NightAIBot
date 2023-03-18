@@ -150,7 +150,7 @@ async def cat(client, message):
 @Client.on_message(filters.command('msone') & filters.incoming)
 async def msone(client, message):
     if len(message.command) < 2:
-        return await message.reply('<b>Example:</b>\n<code>/msone Thor</code>')
+        return await message.reply('<b>Example:</b>\n<code>/msone Triangle</code>')
     res = await message.reply('Searching...', quote=True)
     cmd = message.text.split(' ', 1)[1]
     buttons = []
@@ -162,18 +162,16 @@ async def msone(client, message):
     bu_list = []
     while i < len(names):
         if names[i] in bu_list:
-            await message.reply('Removing...')
             i += 1
             pass
         else:
             buttons.append([InlineKeyboardButton(names[i], url= links[i])])
             bu_list.append(names[i])
             i += 1
-            await message.reply(bu_list)
     buttons.append([InlineKeyboardButton('❌ CLOSE', callback_data='close')])
     markup = InlineKeyboardMarkup(buttons)
     await res.edit('Here is your result.', reply_markup=markup)
     
 @Client.on_message(filters.command('thanos') & filters.incoming)
 async def thanos(client, message):
-    await message.reply(get_thanosquote())
+    await message.reply('<b>'+get_thanosquote()+'</b>')
