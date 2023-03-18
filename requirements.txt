@@ -5,3 +5,4 @@ aiohttp
 httpx[http2]
 psutil
 bs4
+Pillow
