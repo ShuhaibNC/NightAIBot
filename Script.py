@@ -29,5 +29,22 @@ STATS_TXT = """
 """
 
 FEATURES = """
-Test v1
+<b>FEATURES 🐲</b>
+
+<b>Developer : @ShuhaibNC 🌌✨🌚 :</b>
+
+• /ai        - <code>Chat with AI 🤖</code>
+• /msone - <code>search subtitles in msone website 📜</code>
+• /run - <code>run python code 🐍</code>
+• /thanos - <code>get random thanos quote 💜</code>
+• /emoji - <code>covert emoji into image 😶‍🌫️</code>
+• /emix - <code>mix 2 emojis together</code>
+• /echo - <code>echo test</code>
+• /pass - <code>generate strong and easily rememberable passwords 🔑</code>
+
+• /id - <code>get id of a specifed user 👥</code>
+• /help - <code>for help ❓</code>
+• /ping - <code>to check ping 🚄</code>
+• /stats - <code>shows stats of server</code>
+
 """
