@@ -7,7 +7,6 @@ import random
 import string
 import json
 import bs4
-from PIL import Image, ImageDraw, ImageFont
 
 def msonescrap(query, key):
     resultlist = []
