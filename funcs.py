@@ -90,20 +90,3 @@ def get_thanosquote():
     "Fun isn't something one considers when balancing the universe. But this... does put a smile on my face.",
 ]
     return random.choice(thanos_quotes)
-    
-def img_gen(text):
-    image_width = 720
-    image_height = 1080
-    font_size = 50
-
-
-    image = Image.new('RGB', (image_width, image_height), color='white')
-    draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype('baloochettanm.ttf', font_size)
-    text_bbox = draw.textbbox((0, 0), text, font=font)
-    text_width = text_bbox[2] - text_bbox[0]
-    text_height = text_bbox[3] - text_bbox[1]
-    x = (image_width - text_width) / 2
-    y = (image_height - text_height) / 2
-    draw.text((x, y), text, fill='black', font=font)
-    image.save('img.png')

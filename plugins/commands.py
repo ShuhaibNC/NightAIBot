@@ -175,14 +175,3 @@ async def msone(client, message):
 @Client.on_message(filters.command('thanos') & filters.incoming)
 async def thanos(client, message):
     await message.reply('<b>'+get_thanosquote()+'</b>')
-    
-@Client.on_message(filters.command('text2img') & filters.incoming)
-async def texttoimage(client, message):
-    if len(message.command) < 2:
-        return await message.reply('Example: /text2inm Hello')
-    cmd = message.text.split(' ', 1)[1]
-    ms = await message.reply('Processing...', quote=True)
-    img_gen(cmd)
-    await ms.delete()
-    with open('img.png', 'rb') as photo:
-        await message.reply_photo(photo=photo, caption='Thanks for using me')

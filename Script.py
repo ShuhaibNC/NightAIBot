@@ -7,6 +7,8 @@ I am NightAI Bot 🤖
 
 For help hit /help
 Made by @ShuhaibNC
+
+Please /donate
 """
 
 ID_TEXT = """
