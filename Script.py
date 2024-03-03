@@ -27,3 +27,7 @@ STATS_TXT = """
 <b>📂 Storage:</b> <code>{}MB/{}MB</code>
 <b>⚡ Uptime:</b> <code>{}</code>
 """
+
+FEATURES = """
+Test v1
+"""

@@ -54,7 +54,7 @@ async def cb_handler(client: Client, query: CallbackQuery ):
                                 [InlineKeyboardButton('🆘 Help', url='https://t.me/NightAiBot?emoji')],
                                 [InlineKeyboardButton('🔙 Back', callback_data='help')] ]
                         reply_markup = InlineKeyboardMarkup(button)
-                        await query.message.edit_reply_markup(reply_markup)
+                        await query.message.edit_text(Script.FEATURES)
                         
                         
                     elif query.data == 'id_refresh':
