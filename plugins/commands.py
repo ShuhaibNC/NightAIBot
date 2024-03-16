@@ -12,6 +12,10 @@ import asyncio
 from funcs import *
 import psutil
 import subprocess
+import pandas as pd
+import numpy as np
+import pickle
+from feature import FeatureExtraction
 
 #ping
 @Client.on_message(filters.command('ping') & filters.incoming)
@@ -21,6 +25,31 @@ async def ping(client, message):
                 end_time = time.time()
                 elapsed_time = (end_time - start_time) * 1000
                 await m.edit(f'Pong!\n{elapsed_time:.3f}ms')
+                
+#phish detect
+@Client.on_message(filters.command('phish') & filters.incoming)
+async def phish(client, message):
+                if len(message.command) < 2:
+                    return await message.reply('<b>⚡Example:</b>\n<code>/phish https://www.google.com</code>', )
+                url = message.text.split(' ', 1)[1]
+                try:
+                    m = await message.reply("🔮🪄 Analyzing URL...")
+                    with open("catboost_model.pkl", "rb") as file:
+                        gbc = pickle.load(file)
+                    
+                    obj = FeatureExtraction(url)
+                    x = np.array(obj.getFeaturesList()).reshape(1, 30)
+
+                    y_pred = gbc.predict(x)[0]
+                    y_pro_phishing = gbc.predict_proba(x)[0, 0]
+                    y_pro_non_phishing = gbc.predict_proba(x)[0, 1]
+
+                    pred = y_pro_phishing
+                    pred_prec =  round(y_pro_non_phishing * 100, 2)
+                    await m.edit(f'<b>🧬 Phishing Detection Report </b>\n\n<b>URL: </b><code>{url}</code>\nIt is {pred_prec} % safe to go 🧫', quote=True)
+                    
+                except Exception as e:
+                    await m.edit(f'AI is offline.\n\n{e}')
                 
 #start
 @Client.on_message(filters.command('start') & filters.incoming)
