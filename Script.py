@@ -34,6 +34,7 @@ FEATURES = """
 <b>Developer : @ShuhaibNC 🌌✨🌚 :</b>
 
 • /ai        - <code>Chat with AI 🤖</code>
+• /phish - <code>Analyze URL using AI</code>
 • /msone - <code>search subtitles in msone website 📜</code>
 • /run - <code>run python code 🐍</code>
 • /thanos - <code>get random thanos quote 💜</code>
