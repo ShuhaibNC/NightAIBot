@@ -16,6 +16,7 @@ import pandas as pd
 import numpy as np
 import pickle
 from feature import FeatureExtraction
+import datetime
 
 #ping
 @Client.on_message(filters.command('ping') & filters.incoming)
@@ -46,7 +47,18 @@ async def phish(client, message):
 
                     pred = y_pro_phishing
                     pred_prec =  round(y_pro_non_phishing * 100, 2)
-                    await m.edit(f'<b>🧬 Phishing Detection Report </b>\n\n<b>URL: </b><code>{url}</code>\nIt is {pred_prec} % safe to go 🧫', quote=True)
+                    timenow = datetime.datetime.now().strftime("%Y-%m-%d \u2022 %H:%M:%S")
+                    if obj.Hppts() == 1:
+                        proto = "HTTPS"
+                        protoemoji = "🔐"
+                    else:
+                        proto = "HTTP"
+                        protoemoji = "🔓"
+                    detections = obj.getFeaturesList().count(-1) - 10
+                    if detections <= 0:
+                        detections = obj.getFeaturesList().count(-1) - 8
+                    
+                    await m.edit(f'<b>📜 Phishing Detection Report</b>\n\n<b>🧬 Detection: {detections} / 30</b>\n\n<i>📝 URL: {url}</i>\n<i>{protoemoji} Protocol: {proto}</i>\n\n<i>🔬 Last Analysis\n• {timenow}</i>\n\nLINK IS {pred_prec} % SAFE TO GO 🔮', disable_web_page_preview=True)
                     
                 except Exception as e:
                     await m.edit(f'AI is offline.\n\n{e}')
