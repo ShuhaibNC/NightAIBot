@@ -57,11 +57,16 @@ async def phish(client, message):
                     detections = obj.getFeaturesList().count(-1) - 10
                     if detections <= 0:
                         detections = obj.getFeaturesList().count(-1) - 8
+                        
+                    button = [
+                            [InlineKeyboardButton('❌ ᴄʟᴏꜱᴇ', callback_data='close'), InlineKeyboardButton(' 🔄 Refresh', callback_data='id_refresh')]
+                        ]
+                    reply_markup = InlineKeyboardMarkup(button)
                     
-                    await m.edit(f'<b>📜 Phishing Detection Report</b>\n\n<b>🧬 Detection: {detections} / 30</b>\n\n<i>📝 URL: {url}</i>\n<i>{protoemoji} Protocol: {proto}</i>\n\n<i>🔬 Last Analysis\n• {timenow}</i>\n\nLINK IS {pred_prec} % SAFE TO GO 🔮', disable_web_page_preview=True)
+                    await m.edit(f'<b>📜 Phishing Detection Report</b>\n\n<b>🧬 Detection: {detections} / 30</b>\n\n<i>📝 URL: {url}</i>\n<i>{protoemoji} Protocol: {proto}</i>\n\n<i>🔬 Last Analysis\n• {timenow}</i>\n\nLINK IS {pred_prec} % SAFE TO GO 🔮', disable_web_page_preview=True, reply_markup=reply_markup)
                     
                 except Exception as e:
-                    await m.edit(f'AI is offline.\n\n{e}')
+                    await m.edit(f'AI is offline.\n\n{e}', reply_markup=reply_markup)
                 
 #start
 @Client.on_message(filters.command('start') & filters.incoming)
