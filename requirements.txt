@@ -2,4 +2,4 @@ pyrogram
 tgcrypto
 requests
 aiohttp
-httpx[http2]
+httpx[http2]bs4
