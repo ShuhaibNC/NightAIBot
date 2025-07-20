@@ -1,5 +1,4 @@
-#pylint:disable=E0401
-from pyrogram import *
+from pyrogram import Client
 import config
 import logging
 

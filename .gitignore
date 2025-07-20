@@ -1,0 +1,9 @@
+__pycache__/
+__pycache__/*
+plugins/__pycache__
+config.py
+NightAI.session
+NightAI.session-journal
+NightAIBot.session
+NightAIBot.session-journal
+.google-cookie

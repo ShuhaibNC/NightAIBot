@@ -1,21 +1,7 @@
-import io
-from contextlib import redirect_stdout, redirect_stderr
 import requests
 import random
 import string
 
-def run_code(code):
-    output = io.StringIO()
-    try:
-        with redirect_stdout(output):
-            exec(code)
-            result = output.getvalue().strip()
-    except Exception as e:
-        with redirect_stderr(output):
-            exec(code)
-            result = output.getvalue().strip()
-    return result
-    
 def gen_pass():
         adjresp = requests.get("https://gist.githubusercontent.com/hugsy/8910dc78d208e40de42deb29e62df913/raw/eec99c5597a73f6a9240cab26965a8609fa0f6ea/english-adjectives.txt")
         adj = random.choice(adjresp.text.split('\n'))
@@ -25,13 +11,59 @@ def gen_pass():
         punct = random.choice(string.punctuation)
         passw = adj + noun + num + punct
         return passw
-        
-def covid():
-    url = 'https://api.covid19api.com/world/total'
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        total_cases = data['TotalConfirmed']
-        return total_cases
-    else:
-        return 'Error retrieving data'
+import requests
+import bs4
+import re
+import random
+import string
+
+async def msonescrap(query, key):
+    resultlist = []
+    headers = {
+    "User-Agent": "Mozilla/5.0",
+    "Referer": "https://google.com"
+}
+
+    if " " in query:
+        query = query.replace(' ', '+')
+    try:
+        resp = requests.get(f'https://malayalamsubtitles.org/?s={query}', headers=headers, timeout=10)
+        soup = bs4.BeautifulSoup(resp.text, 'html.parser')
+    except:
+        return 'Nothing'
+    
+    if key == 'link':
+    # select all <a> inside <h2 class="entry-title">
+        title_links = soup.select("h2.entry-title a")
+        resultlist = [link.get("href") for link in title_links]
+        return resultlist if resultlist else 'Nothing'
+
+    elif key == 'title':
+        total_titles = soup.select("h2.entry-title a")
+        resultlist = [title.text.strip() for title in total_titles]
+        return resultlist if resultlist else 'Nothing'
+    
+    
+async def remove_duplicates(titles, links):
+    unique_titles = []
+    unique_links = []
+    for i, title in enumerate(titles):
+        if title not in unique_titles:  
+            unique_titles.append(title)
+            unique_links.append(links[i])
+    return unique_titles, unique_links   
+
+async def sanitize_filename(filename):
+    # Replace invalid characters with an underscore or remove them
+    return re.sub(r'[\/:*?"<>|]', '_', filename)
+
+async def get_filename_from_cd(response):
+    """
+    Extracts filename from Content-Disposition header if present.
+    """
+    if 'Content-Disposition' in response.headers:
+        cd = response.headers['Content-Disposition']
+        filename = re.findall('filename="(.+)"', cd)
+        if filename:
+            return filename[0]
+    return None 
