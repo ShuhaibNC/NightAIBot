@@ -62,7 +62,7 @@ JOKE COMMANDS:
 
 START_TEXT = """
 It's NightAI Bot 🤖
-<blockquote>A failed attempt of multipurpose experimental bot</blockquote>
+<pre>A failed attempt of multipurpose experimental bot</pre>
 
 For help hit /help
 """

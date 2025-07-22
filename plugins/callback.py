@@ -31,7 +31,7 @@ async def cb_handler(client: Client, query: CallbackQuery ):
                 [InlineKeyboardButton('Menu 🌌', callback_data='help')]
                 ]
                         reply_markup = InlineKeyboardMarkup(button)
-                        await query.message.edit_text(text=Script.START_TEXT, reply_markup=reply_markup)
+                        await query.message.edit_text(text=Script.START_TEXT, reply_markup=reply_markup, parse_mode=enums.ParseMode.HTML)
                     elif query.data == 'speedtest_image':
                         msg = await query.message.edit('Runing a speedtest....') 
                         speed = speedtest.Speedtest()

@@ -58,7 +58,7 @@ async def start(client, message):
     button = [
     [InlineKeyboardButton('Menu 🌌', callback_data='help')]]
     reply_markup = InlineKeyboardMarkup(button)
-    await message.reply(Script.START_TEXT, reply_markup=reply_markup, quote=True)
+    await message.reply(Script.START_TEXT, reply_markup=reply_markup, quote=True, parse_mode=enums.ParseMode.HTML)
                 
 #help
 @Client.on_message(filters.command('help') & filters.incoming)
@@ -259,7 +259,7 @@ async def lyrics(bot, update):
     if len(update.command) < 2:
         return await update.reply('<b>Example:</b>\n<code>/lyrics Middle of the night</code>')
     query = update.text.split(' ', 1)[1]
-    k = await update.reply(f'Searching for {query}...')
+    k = await update.reply(f'Searching for {query}...', parse_mode=enums.ParseMode.HTML)
     
     headers = {
     "User-Agent": "Mozilla/5.0",
@@ -272,7 +272,7 @@ async def lyrics(bot, update):
     except (json.JSONDecodeError, IndexError):
         lyric = None
     if lyric:
-        await k.edit(f'📝 Lyrics for <b>{query}</b>:\n\n<blockquote>{lyric}</blockquote>', parse_mode=enums.ParseMode.HTML)
+        await k.edit(f'📝 Lyrics for <b>{query}</b>:\n\n<pre>{lyric}</pre>', parse_mode=enums.ParseMode.HTML)
     else:
         await k.edit('No lyrics found for this song.')
 @Client.on_message(filters.command('gifid') & filters.incoming)    
