@@ -1,8 +1,12 @@
 __pycache__/
 __pycache__/*
-plugins/__pycache__
+plugins/__pycache__/
+plugins/__pycache__/*
 NightAI.session
 NightAI.session-journal
 NightAIBot.session
 NightAIBot.session-journal
 .google-cookie
+config.py
+plugins/__pycache__/callback.cpython-311.pyc
+plugins/__pycache__/commands.cpython-311.pyc

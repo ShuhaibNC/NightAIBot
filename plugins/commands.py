@@ -1,4 +1,5 @@
 from pyrogram import Client, filters, enums
+from pyrogram.enums import ChatAction
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 import time
 import Script
@@ -10,6 +11,8 @@ import asyncio
 from funcs import *
 import uuid
 import os
+from datetime import datetime
+from gtts import gTTS
 
 
 link_dict = {}
@@ -135,7 +138,19 @@ async def bombs(bot, update):
         await msg.edit(Script.bomb_ettu[x%9])
         time.sleep(1)
     await msg.edit('RIP PLOX...')
-
+    
+@Client.on_message(filters.command('police') & filters.incoming)
+async def police(bot, update):
+    msg = await bot.send_message(
+        chat_id=update.chat.id,
+        text="Police is coming!",
+        reply_to_message_id= update.reply_to_message.id if update.reply_to_message else update.id,
+        disable_web_page_preview=True,
+    )
+    for x in range(3):
+        await msg.edit(Script.police_siren[x%2])
+        time.sleep(1)
+    await msg.edit('Police is here!')
 @Client.on_message(filters.command('hack') & filters.text)
 async def hack(bot, update):
     if len(update.command) < 2:
@@ -182,26 +197,23 @@ async def msone(bot, message):
     titles = await msonescrap(cmd, 'title')
     links = await msonescrap(cmd, 'link')
     # titles, links = remove_duplicates(titles, links)
-    for link in links:
-        resp = requests.get(link, headers=headers, timeout=10)
-        soup = bs4.BeautifulSoup(resp.text, 'html.parser')
-        dl_btn = soup.select_one("a#download-button")
-        download_links.append(dl_btn.get("data-downloadurl"))
-        
-    
-    
     if titles == 'Nothing' or links == 'Nothing':
         return await res.edit('No results found.')
     else:
-        i = 0
-        while i < len(titles):
-            key = str(uuid.uuid4())[:8]
-            link_dict[key] = download_links[i]
-            buttons.append([InlineKeyboardButton(titles[i], url=f"https://t.me/NightAiBot?start=upload_{key}")])
-            i += 1
-        buttons.append([InlineKeyboardButton('❌ CLOSE', callback_data='close_data')])
-        markup = InlineKeyboardMarkup(buttons)
-        await res.edit(f'Here is your result for your query {cmd}', reply_markup=markup)
+        for link in links:
+            resp = requests.get(link, headers=headers, timeout=10)
+            soup = bs4.BeautifulSoup(resp.text, 'html.parser')
+            dl_btn = soup.select_one("a#download-button")
+            download_links.append(dl_btn.get("data-downloadurl"))
+            i = 0
+            while i < len(titles):
+                key = str(uuid.uuid4())[:8]
+                link_dict[key] = download_links[i]
+                buttons.append([InlineKeyboardButton(titles[i], url=f"https://t.me/NightAiBot?start=upload_{key}")])
+                i += 1
+            buttons.append([InlineKeyboardButton('❌ CLOSE', callback_data='close_data')])
+            markup = InlineKeyboardMarkup(buttons)
+            await res.edit(f'Here is your result for your query {cmd}', reply_markup=markup)
 
 @Client.on_message(filters.command('github') & filters.text)        
 async def github(bot, message):
@@ -263,4 +275,75 @@ async def lyrics(bot, update):
         await k.edit(f'Lyrics for <b>{query}</b>:\n\n<code>{lyric}</code>', parse_mode=enums.ParseMode.HTML)
     else:
         await k.edit('No lyrics found for this song.')
-    
+@Client.on_message(filters.command('gifid') & filters.incoming)    
+async def gifid(bot, update):
+    if update.reply_to_message and update.reply_to_message.animation:
+        await update.reply_text(f"Gif ID:\n<code>{update.reply_to_message.animation.file_id}</code>",
+                                            parse_mode=enums.ParseMode.HTML)
+    else:
+        await update.reply_text("Please reply to a gif to get its ID.")
+
+
+@Client.on_message(filters.command('speedtest') & filters.incoming)
+async def speedtestxyz(bot, update):
+    buttons = [
+        [InlineKeyboardButton("Image", callback_data="speedtest_image"), InlineKeyboardButton("Text", callback_data="speedtest_text")]
+    ]
+    await update.reply_text("Select SpeedTest Mode", reply_markup=InlineKeyboardMarkup(buttons))
+
+@Client.on_message(filters.command('stickerid') & filters.incoming)
+async def stickerid(bot, update):
+    msg = update.reply_to_message
+    if msg and msg.sticker:
+        return await update.reply_text("Sticker ID:\n<code>" +
+                                            html.escape(msg.sticker.file_id) + "</code>", parse_mode=enums.ParseMode.HTML)
+    else:
+        return await update.reply_text("Please reply to a sticker to get its ID.")
+
+@Client.on_message(filters.command('getsticker') & filters.incoming)
+async def getsticker(bot, update):
+    msg = update.reply_to_message
+    chat_id = update.chat.id
+
+    if msg and msg.sticker:
+        # download() directly on the message's sticker
+        file_path = await msg.download(file_name="sticker.png")
+        await bot.send_document(chat_id, document=file_path)
+        os.remove(file_path)
+    else:
+        await update.reply_text("Please reply to a sticker for me to upload its PNG.")
+@Client.on_message(filters.command("tts") & filters.text)
+async def tts_handler(client: Client, message):
+    # Extract text
+    if not message.reply_to_message:
+        if len(message.command) < 2:
+            return await message.reply("Give me some text: `/tts ente peru anu...`", quote=True)
+        text = message.text.split(" ", 1)[1]
+    else:
+        text = message.reply_to_message.text or message.reply_to_message.caption or ""
+        if not text:
+            return await message.reply("Reply to a message with text or caption to convert to speech.", quote=True)
+    lang = "ml"
+    filename = f"{datetime.now().strftime('%d%m%y-%H%M%S%f')}.mp3"
+
+    # Try generating Malayalam voice
+    try:
+        tts = gTTS(text, lang=lang)
+        tts.save(filename)
+        with open(filename, "rb") as f:
+            if len(list(f)) == 1:
+                raise ValueError("Malayalam TTS too short, fallback to English")
+    except:
+        # Fallback to English
+        lang = "en"
+        tts = gTTS(text, lang=lang)
+        tts.save(filename)
+
+    await client.send_chat_action(chat_id=message.chat.id, action=ChatAction.RECORD_AUDIO)
+
+    await message.reply_voice(reply_to_message_id= message.reply_to_message.id if message.reply_to_message else message.id,voice=filename, quote=False)
+    try:
+        os.remove(filename)
+    except Exception as e:
+        await message.reply(f"Error removing file {filename}: {e}")
+

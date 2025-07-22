@@ -5,20 +5,41 @@ SYSTEM COMMANDS:
  /start - <code>to start the bot</code>
  /help - <code>to get help</code>
  /stats - <code>Get bot statistics</code>
+ /ping - <code>Check the bot's response time</code>
+ /speedtest - <code>Run a speed test</code>
  
 BASIC COMMANDS:
  /msone - <code>to get the malayalam subtitle file from msone</code>
  /github - <code>Returns info about a GitHub user or organization.</code>
- /id - <code>Get your user ID and other details</code>
- /ping - <code>Check the bot's response time</code>
- /echo - <code>Echo back your message</code>
  /lyrics - <code>returns the lyrics of that song.</code>
-
+ /tts - <code>Convert text to speech</code>
+ /gifid - <code>Get the ID of a gif</code>
+ /stickerid - <code>Get the ID of a sticker</code>
+ /getsticker - <code>Get a sticker png by replying it</code>
+ 
+MATH COMMANDS:
+ /simplify - <code>simplify a mathematical expression</code>
+ /factor - <code>factor a mathematical expression</code>
+ /derive - <code>find the derivative of a mathematical expression</code>
+ /integrate - <code>find the integral of a mathematical expression</code>
+ /zeroes - <code>find the zeroes of a mathematical expression</code>
+ /tangent - <code>find the tangent line of a mathematical expression at a given point</code>
+ /area - <code>find the area under a mathematical expression between two points</code>
+ /cos - <code>find the cosine of a number</code>
+ /sin - <code>find the sine of a number</code>
+ /tan - <code>find the tangent of a number</code>
+ /arccos - <code>find the arccosine of a number</code>
+ /arcsin - <code>find the arcsine of a number</code>
+ /arctan - <code>find the arctangent of a number</code>
+ /abs - <code>find the absolute value of a number</code>
+ /log - <code>find the logarithm of a number</code>
+ 
 FUN COMMANDS:
  /love - <code>love siren ❤️</code>
  /hack - <code>hack a user 👨‍💻</code>
  /bombs - <code>bombing 💣</code>
  /blockanimation - <code>block animation ⬜</code>
+ /police - <code>police siren 🚨</code>
 
 JOKE COMMANDS:
  /runs - <code>reply a random string from an array of replies.</code>
@@ -110,6 +131,11 @@ hack_you = [
             "Hacking... 86.21%\n[███████████████░░░░░]",
             "Hacking... 93.50%\n[█████████████████░░░]",
             "hacking....  100%\n[████████████████████]",
+]
+
+police_siren = [
+            "🔴🔴🔴⬜️⬜️⬜️🔵🔵🔵\n🔴🔴🔴⬜️⬜️⬜️🔵🔵🔵\n🔴🔴🔴⬜️⬜️⬜️🔵🔵🔵",
+            "🔵🔵🔵⬜️⬜️⬜️🔴🔴🔴\n🔵🔵🔵⬜️⬜️⬜️🔴🔴🔴\n🔵🔵🔵⬜️⬜️⬜️🔴🔴🔴"
 ]
 
 
