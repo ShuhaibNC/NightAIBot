@@ -12,6 +12,8 @@ BASIC COMMANDS:
  /msone - <code>to get the malayalam subtitle file from msone</code>
  /github - <code>Returns info about a GitHub user or organization.</code>
  /lyrics - <code>returns the lyrics of that song.</code>
+ /ud - <code>Get the definition of a word from urbandictionary</code>
+ /urban - <code>Same as ud</code>
  /tts - <code>Convert text to speech</code>
  /gifid - <code>Get the ID of a gif</code>
  /stickerid - <code>Get the ID of a sticker</code>

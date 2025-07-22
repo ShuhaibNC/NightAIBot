@@ -281,7 +281,7 @@ async def gifid(bot, update):
         await update.reply_text(f"Gif ID:\n<code>{update.reply_to_message.animation.file_id}</code>",
                                             parse_mode=enums.ParseMode.HTML)
     else:
-        await update.reply_text("Please reply to a gif to get its ID.")
+        await update.reply_text("<i>Please reply to a gif to get its ID.</i>", parse_mode=enums.ParseMode.HTML)
 
 
 @Client.on_message(filters.command('speedtest') & filters.incoming)
@@ -298,7 +298,7 @@ async def stickerid(bot, update):
         return await update.reply_text("Sticker ID:\n<code>" +
                                             html.escape(msg.sticker.file_id) + "</code>", parse_mode=enums.ParseMode.HTML)
     else:
-        return await update.reply_text("Please reply to a sticker to get its ID.")
+        return await update.reply_text("<i>Please reply to a sticker to get its ID.</i>", parse_mode=enums.ParseMode.HTML)
 
 @Client.on_message(filters.command('getsticker') & filters.incoming)
 async def getsticker(bot, update):
@@ -311,18 +311,18 @@ async def getsticker(bot, update):
         await bot.send_document(chat_id, document=file_path)
         os.remove(file_path)
     else:
-        await update.reply_text("Please reply to a sticker for me to upload its PNG.")
+        await update.reply_text("<i>Please reply to a sticker for me to upload its PNG.</i>", parse_mode=enums.ParseMode.HTML)
 @Client.on_message(filters.command("tts") & filters.text)
 async def tts_handler(client: Client, message):
     # Extract text
     if not message.reply_to_message:
         if len(message.command) < 2:
-            return await message.reply("Give me some text: `/tts ente peru anu...`", quote=True)
+            return await message.reply("Give me some text: <code>/tts enter per night ai</code>", quote=True, parse_mode=enums.ParseMode.HTML)
         text = message.text.split(" ", 1)[1]
     else:
         text = message.reply_to_message.text or message.reply_to_message.caption or ""
         if not text:
-            return await message.reply("Reply to a message with text or caption to convert to speech.", quote=True)
+            return await message.reply("<i>Reply to a message with text or caption to convert to speech.</i>", quote=True, parse_mode=enums.ParseMode.HTML)
     lang = "ml"
     filename = f"{datetime.now().strftime('%d%m%y-%H%M%S%f')}.mp3"
 
@@ -346,4 +346,42 @@ async def tts_handler(client: Client, message):
         os.remove(filename)
     except Exception as e:
         await message.reply(f"Error removing file {filename}: {e}")
+
+@Client.on_message(filters.command(['ud', 'urban']) & filters.text)
+async def ud(bot, message):
+    if len(message.command) < 2:
+            return await message.reply("<b>Example:</b>\n<code>/ud incel</code>", quote=True)
+    text = message.text.split(" ", 1)[1]
+    results = requests.get(f'http://api.urbandictionary.com/v0/define?term={text}').json()
+    try:
+        reply_text = f'<b>📝 Word: {text}</b>\n\n<b>ℹ️ Definition</b>\n{results["list"][0]["definition"]}\n\n<b>📌 Example</b>\n<i>{results["list"][0]["example"]}</i>'
+    except:
+        reply_text = "<i>No results found.</i>"
+    await message.reply_text(reply_text, parse_mode=enums.ParseMode.HTML, disable_web_page_preview=True, quote=True)
+
+
+@Client.on_message(filters.command('weebify') & filters.text)
+async def weebify(bot, update):
+    if not update.reply_to_message:
+        if len(update.command) < 2:
+            return await update.reply("Give me some text: <code>/weebify helloworld</code>", quote=True, parse_mode=enums.ParseMode.HTML)
+        text = update.text.split(" ", 1)[1]
+    else:
+        text = update.reply_to_message.text or update.reply_to_message.caption or ""
+        if not text:
+            return await update.reply("<i>Reply to a message with text or caption to convert to weebify.</i>", quote=True, parse_mode=enums.ParseMode.HTML)
+    string = text.lower()
+    normiefont = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+              'v', 'w', 'x', 'y', 'z']
+    weebyfont = ['卂', '乃', '匚', '刀', '乇', '下', '厶', '卄', '工', '丁', '长', '乚', '从', '𠘨', '口', '尸', '㔿', '尺', '丂', '丅', '凵',
+             'リ', '山', '乂', '丫', '乙']
+    for normiecharacter in string:
+        if normiecharacter in normiefont:
+            weebycharacter = weebyfont[normiefont.index(normiecharacter)]
+            string = string.replace(normiecharacter, weebycharacter)
+    if update.reply_to_message:
+        await update.reply_to_message.reply_text(string)
+    else:
+        await update.reply_text(string)
+
 
