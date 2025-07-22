@@ -13,6 +13,8 @@ import uuid
 import os
 from datetime import datetime
 from gtts import gTTS
+import math
+from .newton import math_request
 
 
 link_dict = {}
@@ -52,13 +54,14 @@ async def start(client, message):
         finally:
             if os.path.exists(filename):
                 os.remove(filename)  # clean up
-    thunder = await message.reply('⚡')
-    await asyncio.sleep(1)
-    await thunder.delete()
-    button = [
-    [InlineKeyboardButton('Menu 🌌', callback_data='help')]]
-    reply_markup = InlineKeyboardMarkup(button)
-    await message.reply(Script.START_TEXT, reply_markup=reply_markup, quote=True, parse_mode=enums.ParseMode.HTML)
+    else:
+        thunder = await message.reply('⚡')
+        await asyncio.sleep(1)
+        await thunder.delete()
+        button = [
+        [InlineKeyboardButton('Menu 🌌', callback_data='help')]]
+        reply_markup = InlineKeyboardMarkup(button)
+        await message.reply(Script.START_TEXT, reply_markup=reply_markup, quote=True, parse_mode=enums.ParseMode.HTML)
                 
 #help
 @Client.on_message(filters.command('help') & filters.incoming)
@@ -111,6 +114,129 @@ async def echofunc(client, message):
         reply_to_message_id= message.reply_to_message.id if message.reply_to_message else message.id,
         disable_web_page_preview=True,
     )
+
+def extract_expression(message):
+    return message.text.split(' ', 1)[1] if len(message.command) >= 2 else None
+
+
+@Client.on_message(filters.command('simplify') & filters.text)
+async def simplify(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/simplify 2^2+2(2)</code>')
+    await message.reply_text(math_request("simplify", expr))
+
+
+@Client.on_message(filters.command('factor') & filters.text)
+async def factor(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/factor x^2 + 2x</code>')
+    await message.reply_text(math_request("factor", expr))
+
+
+@Client.on_message(filters.command('derive') & filters.text)
+async def derive(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/derive x^2+2x</code>')
+    await message.reply_text(math_request("derive", expr))
+
+
+@Client.on_message(filters.command('integrate') & filters.text)
+async def integrate(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/integrate x^2+2x</code>')
+    await message.reply_text(math_request("integrate", expr))
+
+
+@Client.on_message(filters.command('zeroes') & filters.text)
+async def zeroes(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/zeroes x^2+2x</code>')
+    await message.reply_text(math_request("zeroes", expr))
+
+
+@Client.on_message(filters.command('tangent') & filters.text)
+async def tangent(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/tangent 2|x^3</code>\nWhere 2 is the x value at which you want to find the tangent line, and x^3 is the function expression.')
+    await message.reply_text(math_request("tangent", expr))
+
+
+@Client.on_message(filters.command('area') & filters.text)
+async def area(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/area 2:4|x^3</code>\nWhere 2 is the starting x value, 4 is the ending x value, and x^3 is the function under which you want the area between the two x values.')
+    await message.reply_text(math_request("area", expr))
+
+
+@Client.on_message(filters.command('cos') & filters.text)
+async def cos(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/cos pi</code>')
+    await message.reply_text(math.cos(eval(expr)))
+
+
+@Client.on_message(filters.command('sin') & filters.text)
+async def sin(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/sin 0</code>')
+    await message.reply_text(math.sin(eval(expr)))
+
+
+@Client.on_message(filters.command('tan') & filters.text)
+async def tan(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/tan 0</code>')
+    await message.reply_text(math.tan(eval(expr)))
+
+
+@Client.on_message(filters.command('arccos') & filters.text)
+async def arccos(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/arccos 1</code>')
+    await message.reply_text(math.acos(eval(expr)))
+
+
+@Client.on_message(filters.command('arcsin') & filters.text)
+async def arcsin(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/arcsin 0</code>')
+    await message.reply_text(math.asin(eval(expr)))
+
+
+@Client.on_message(filters.command('arctan') & filters.text)
+async def arctan(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/arctan 0</code>')
+    await message.reply_text(math.atan(eval(expr)))
+
+
+@Client.on_message(filters.command('abs') & filters.text)
+async def abs_(bot, message):  # `abs` is a Python built-in, renamed to abs_
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/abs -1</code>')
+    await message.reply_text(math.fabs(eval(expr)))
+
+
+@Client.on_message(filters.command('log') & filters.text)
+async def log(bot, message):
+    expr = extract_expression(message)
+    if not expr:
+        return await message.reply('<b>Example:</b>\n<code>/log 10</code>')
+    await message.reply_text(math.log(eval(expr)))
 
 
 @Client.on_message(filters.command('blockanimation') & filters.incoming)
@@ -185,35 +311,47 @@ async def love(bot, update):
 async def msone(bot, message):
     if len(message.command) < 2:
         return await message.reply('<b>Example:</b>\n<code>/msone Titanic</code>')
-    
+
     res = await message.reply('Searching...', quote=True)
     cmd = message.text.split(' ', 1)[1]
     buttons = []
     download_links = []
+
     headers = {
-    "User-Agent": "Mozilla/5.0",
-    "Referer": "https://google.com"
-}
+        "User-Agent": "Mozilla/5.0",
+        "Referer": "https://google.com"
+    }
+
     titles = await msonescrap(cmd, 'title')
     links = await msonescrap(cmd, 'link')
-    # titles, links = remove_duplicates(titles, links)
+
     if titles == 'Nothing' or links == 'Nothing':
         return await res.edit('No results found.')
-    else:
-        for link in links:
+
+    # Scrape download links
+    for link in links:
+        try:
             resp = requests.get(link, headers=headers, timeout=10)
             soup = bs4.BeautifulSoup(resp.text, 'html.parser')
             dl_btn = soup.select_one("a#download-button")
-            download_links.append(dl_btn.get("data-downloadurl"))
-            i = 0
-            while i < len(titles):
-                key = str(uuid.uuid4())[:8]
-                link_dict[key] = download_links[i]
-                buttons.append([InlineKeyboardButton(titles[i], url=f"https://t.me/NightAiBot?start=upload_{key}")])
-                i += 1
-            buttons.append([InlineKeyboardButton('❌ CLOSE', callback_data='close_data')])
-            markup = InlineKeyboardMarkup(buttons)
-            await res.edit(f'Here is your result for your query {cmd}', reply_markup=markup)
+            if dl_btn:
+                download_links.append(dl_btn.get("data-downloadurl"))
+            else:
+                download_links.append(None)
+        except Exception as e:
+            download_links.append(None)
+
+    # Build buttons for available links
+    for title, dl_link in zip(titles, download_links):
+        if dl_link:
+            key = str(uuid.uuid4())[:8]
+            link_dict[key] = dl_link
+            buttons.append([InlineKeyboardButton(title, url=f"https://t.me/NightAiBot?start=upload_{key}")])
+
+    buttons.append([InlineKeyboardButton('❌ CLOSE', callback_data='close_data')])
+    markup = InlineKeyboardMarkup(buttons)
+
+    await res.edit(f'Here is your result for your query <b>{cmd}</b>', reply_markup=markup)
 
 @Client.on_message(filters.command('github') & filters.text)        
 async def github(bot, message):
