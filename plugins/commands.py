@@ -14,7 +14,7 @@ import os
 from datetime import datetime
 from gtts import gTTS
 import math
-from newton import math_request
+from plugins.newton import math_request
 
 
 link_dict = {}
