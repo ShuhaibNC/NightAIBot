@@ -272,7 +272,7 @@ async def lyrics(bot, update):
     except (json.JSONDecodeError, IndexError):
         lyric = None
     if lyric:
-        await k.edit(f'Lyrics for <b>{query}</b>:\n\n<code>{lyric}</code>', parse_mode=enums.ParseMode.HTML)
+        await k.edit(f'📝 Lyrics for <b>{query}</b>:\n\n<blockquote>{lyric}</blockquote>', parse_mode=enums.ParseMode.HTML)
     else:
         await k.edit('No lyrics found for this song.')
 @Client.on_message(filters.command('gifid') & filters.incoming)    

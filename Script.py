@@ -37,6 +37,7 @@ MATH COMMANDS:
  /log - <code>find the logarithm of a number</code>
  
 FUN COMMANDS:
+ /weebify - <code>Convert text to weeb language</code>
  /love - <code>love siren ❤️</code>
  /hack - <code>hack a user 👨‍💻</code>
  /bombs - <code>bombing 💣</code>
