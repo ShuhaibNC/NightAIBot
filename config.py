@@ -1,3 +1,5 @@
-API_ID = 3616787
-API_HASH = 'e49f6597a66149243a7baf5df57c0337'
-BOT_TOKEN = '1896096002:AAGzzfaplWvFQdpQwL6cgMs2Nv6sZjkGgZo'
+import os
+
+API_ID = int(os.getenv("API_ID"))
+API_HASH = os.getenv("API_HASH")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
