@@ -42,6 +42,9 @@ async def msonescrap(query, key):
         total_titles = soup.select("h2.entry-title a")
         resultlist = [title.text.strip() for title in total_titles]
         return resultlist if resultlist else 'Nothing'
+    elif key == 'thumb':
+        image_links = [a.select_one("img")["src"] for a in soup.select("article.entry") if a.select_one("img")]
+        return image_links if image_links else 'Nothing'
     
     
 async def remove_duplicates(titles, links):

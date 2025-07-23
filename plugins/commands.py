@@ -16,6 +16,7 @@ from gtts import gTTS
 import math
 from plugins.newton import math_request
 
+headers = {"User-Agent": "Mozilla/5.0"}
 
 link_dict = {}
 
@@ -32,12 +33,24 @@ async def ping(client, message):
 @Client.on_message(filters.command('start'))
 async def start(client, message):
     if len(message.command) > 1 and message.command[1].startswith("upload_"):
+        k = await message.reply("Fetching Download link...")
         key = message.command[1][7:]
-        real_url = link_dict.get(key)
+        link = link_dict.get(key)
         try:
-            response = requests.get(real_url, stream=True, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+            resp = requests.get(link, headers=headers, timeout=10)
+            soup = bs4.BeautifulSoup(resp.text, 'html.parser')
+            dl_btn = soup.select_one("a#download-button")
+            if dl_btn:
+                real_url = dl_btn.get("data-downloadurl")
+            else:
+                await k.edit("Download link not found.")
+        except Exception as e:
+            await k.edit(f"Error fetching download link: {e}")
+        try:
+            await k.edit("Downloading file...")
+            response = requests.get(real_url, stream=True, headers=headers, timeout=10)
             filename = await sanitize_filename(await get_filename_from_cd(response) or f"file_{key}.srt")
-            k = await message.reply(f"Uploading: <code>{filename}</code>", quote=True)
+            await k.edit(f"Uploading: <code>{filename}</code>", quote=True)
             with open(filename, "wb") as f:
                 f.write(response.content)
 
@@ -328,24 +341,11 @@ async def msone(bot, message):
     if titles == 'Nothing' or links == 'Nothing':
         return await res.edit('No results found.')
 
-    # Scrape download links
-    for link in links:
-        try:
-            resp = requests.get(link, headers=headers, timeout=10)
-            soup = bs4.BeautifulSoup(resp.text, 'html.parser')
-            dl_btn = soup.select_one("a#download-button")
-            if dl_btn:
-                download_links.append(dl_btn.get("data-downloadurl"))
-            else:
-                download_links.append(None)
-        except Exception as e:
-            download_links.append(None)
-
     # Build buttons for available links
-    for title, dl_link in zip(titles, download_links):
-        if dl_link:
+    for title, link in zip(titles, links):
+        if link:
             key = str(uuid.uuid4())[:8]
-            link_dict[key] = dl_link
+            link_dict[key] = link
             buttons.append([InlineKeyboardButton(title, url=f"https://t.me/NightAiBot?start=upload_{key}")])
 
     buttons.append([InlineKeyboardButton('❌ CLOSE', callback_data='close_data')])
