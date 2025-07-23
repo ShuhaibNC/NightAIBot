@@ -337,16 +337,15 @@ async def msone(bot, message):
 
     titles = await msonescrap(cmd, 'title')
     links = await msonescrap(cmd, 'link')
-
+    me = await bot.get_me()
     if titles == 'Nothing' or links == 'Nothing':
         return await res.edit('No results found.')
-
     # Build buttons for available links
     for title, link in zip(titles, links):
         if link:
             key = str(uuid.uuid4())[:8]
             link_dict[key] = link
-            buttons.append([InlineKeyboardButton(title, url=f"https://t.me/NightAiBot?start=upload_{key}")])
+            buttons.append([InlineKeyboardButton(title, url=f"https://t.me/{me.username}?start=upload_{key}")])
 
     buttons.append([InlineKeyboardButton('❌ CLOSE', callback_data='close_data')])
     markup = InlineKeyboardMarkup(buttons)

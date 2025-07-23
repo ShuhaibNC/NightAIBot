@@ -1,14 +1,14 @@
 HELP_TEXT = """
 I dont know how to help you, but you can try these commands:    
 
-SYSTEM COMMANDS:
+SYSTEM COMMANDS:<blockquote expandable>
  /start - <code>to start the bot</code>
  /help - <code>to get help</code>
  /stats - <code>Get bot statistics</code>
  /ping - <code>Check the bot's response time</code>
- /speedtest - <code>Run a speed test</code>
+ /speedtest - <code>Run a speed test</code></blockquote>
  
-BASIC COMMANDS:
+BASIC COMMANDS:<blockquote expandable>
  /msone - <code>to get the malayalam subtitle file from msone</code>
  /github - <code>Returns info about a GitHub user or organization.</code>
  /lyrics - <code>returns the lyrics of that song.</code>
@@ -17,9 +17,9 @@ BASIC COMMANDS:
  /tts - <code>Convert text to speech</code>
  /gifid - <code>Get the ID of a gif</code>
  /stickerid - <code>Get the ID of a sticker</code>
- /getsticker - <code>Get a sticker png by replying it</code>
+ /getsticker - <code>Get a sticker png by replying it</code></blockquote>
  
-MATH COMMANDS:
+MATH COMMANDS:<blockquote expandable>
  /simplify - <code>simplify a mathematical expression</code>
  /factor - <code>factor a mathematical expression</code>
  /derive - <code>find the derivative of a mathematical expression</code>
@@ -34,17 +34,17 @@ MATH COMMANDS:
  /arcsin - <code>find the arcsine of a number</code>
  /arctan - <code>find the arctangent of a number</code>
  /abs - <code>find the absolute value of a number</code>
- /log - <code>find the logarithm of a number</code>
+ /log - <code>find the logarithm of a number</code> </blockquote>
  
-FUN COMMANDS:
+FUN COMMANDS:<blockquote expandable>
  /weebify - <code>Convert text to weeb language</code>
  /love - <code>love siren ❤️</code>
  /hack - <code>hack a user 👨‍💻</code>
  /bombs - <code>bombing 💣</code>
  /blockanimation - <code>block animation ⬜</code>
- /police - <code>police siren 🚨</code>
+ /police - <code>police siren 🚨</code></blockquote>
 
-JOKE COMMANDS:
+JOKE COMMANDS:<blockquote expandable>
  /runs - <code>reply a random string from an array of replies.</code>
  /shrug - <code>get shrug XD.</code>
  /table - <code>get flip/unflip :v.</code>
@@ -57,7 +57,7 @@ JOKE COMMANDS:
  /abuse - <code>Get a random abuse string.</code>
  /items - <code>Get a random item from an array of items.</code>
  /hit - <code>Get a random hit string.</code>
- /throw - <code>Get a random throw string.</code>
+ /throw - <code>Get a random throw string.</code></blockquote>
 """
 
 START_TEXT = """
@@ -80,15 +80,15 @@ STATUS_TXT = """<b>
 
 👤 Total Users: <code>{}</code>
 
-🗄️ Server: <code>AWS</code>
+🗄️ Server: <code>Koyeb</code>
 
-💾 Memory: <code>64GB</code>
+💾 Memory: <code>2GB</code>
 
 🖥️ CPU: <code>8 Cores Xeon</code>
 
 🌐 Uptime: <code>69.99%</code>
 
-🧩 Bot Version: <code>v0.1.0</code>
+🧩 Bot Version: <code>v0.1.1</code>
 </b>
 
 """
