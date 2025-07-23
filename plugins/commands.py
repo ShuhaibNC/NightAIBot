@@ -50,7 +50,7 @@ async def start(client, message):
             await k.edit("Downloading file...")
             response = requests.get(real_url, stream=True, headers=headers, timeout=10)
             filename = await sanitize_filename(await get_filename_from_cd(response) or f"file_{key}.srt")
-            await k.edit(f"Uploading: <code>{filename}</code>", quote=True)
+            await k.edit(f"Uploading: <code>{filename}</code>")
             with open(filename, "wb") as f:
                 f.write(response.content)
 
