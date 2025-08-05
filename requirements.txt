@@ -6,4 +6,4 @@ httpx[http2]
 bs4
 speedtest-cli
 gTTS
-
+ffmpeg
