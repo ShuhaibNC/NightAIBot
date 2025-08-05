@@ -2,7 +2,7 @@ import os
 import subprocess
 
 # Set your input/output/image here
-os.environ['IN'] = "https://segment.yuppcdn.net/110322/channel24/playlist.m3u8"
+os.environ['IN'] = "https://stream-155.zeno.fm/dtr207bhb8zuv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJkdHIyMDdiaGI4enV2IiwiaG9zdCI6InN0cmVhbS0xNTUuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6IjlDdm1YR2VDUlYtV3dadGt4dUtnakEiLCJpYXQiOjE3NTQ0MDA3ODAsImV4cCI6MTc1NDQwMDg0MH0.9q8TDnEXHZcWxiE0goPhDMIX1S59qSlcsyMRRZDGay8"
 os.environ['OUT'] = "rtmps://dc5-1.rtmp.t.me/s/1666122378:RxvW87rHe6xQPT4FbWTvYQ"
 os.environ['JPG'] = "https://upload.wikimedia.org/wikipedia/commons/c/c5/Spectrogram-19thC.png"
 
