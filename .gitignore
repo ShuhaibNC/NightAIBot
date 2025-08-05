@@ -10,3 +10,5 @@ NightAIBot.session-journal
 config.py
 plugins/__pycache__/callback.cpython-311.pyc
 plugins/__pycache__/commands.cpython-311.pyc
+NightAIBot.session-shm
+NightAIBot.session-wal

@@ -13,14 +13,14 @@ from funcs import msonescrap
 @Client.on_inline_query()
 async def inline_handler(bot, query: InlineQuery):
     q = query.query.strip()
-
+    me = await bot.get_me()
     if not q:
         return await query.answer([
             InlineQueryResultArticle(
-                title="Type something to search in MSONE...",
-                input_message_content=InputTextMessageContent("Try `@NightAiBot Inception`"),
+                title="Type something to search in MSONE Subtitles...",
+                input_message_content=InputTextMessageContent(f"Try `@{me.username} Inception`"),
                 description="MSONE Inline Search",
-                thumb_url="https://malayalamsubtitles.org/wp-content/uploads/2025/03/msone-nav-id-icon.png",
+                thumbnail_url="https://malayalamsubtitles.org/wp-content/uploads/2025/03/msone-nav-id-icon.png",
             )
         ], cache_time=1)
 
@@ -41,7 +41,7 @@ async def process_msone_inline(bot, query: InlineQuery, q: str):
     titles = await msonescrap(q, 'title')
     links = await msonescrap(q, 'link')
     thumbs = await msonescrap(q, 'thumb')
-
+    me = await bot.get_me()
     if titles == 'Nothing' or links == 'Nothing':
         return await query.answer([
             InlineQueryResultArticle(
@@ -58,15 +58,17 @@ async def process_msone_inline(bot, query: InlineQuery, q: str):
             results.append(
                 InlineQueryResultArticle(
                     title=title,
-                    thumb_url=thumb if thumb else "https://malayalamsubtitles.org/wp-content/uploads/2025/03/msone-nav-id-icon.png",
-                    description="🎬 Tap to get download button",
+                    thumbnail_url=thumb if thumb else "https://malayalamsubtitles.org/wp-content/uploads/2025/03/msone-nav-id-icon.png",
+                    description=link,
                     input_message_content=InputTextMessageContent(
-                        f"<b>{title}</b>\nClick below 👇",
+                        f"<b>🎬 Title : </b><code>{title}</code>\n\n<b>🔗 MSONE Link: </b>{link}\n\n<b>⬇️ Click Below Button to Upload File to Telegram...</b>",
                         parse_mode=enums.ParseMode.HTML
                     ),
-                    reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton("⬆️ Upload", url=f"https://t.me/NightAiBot?start=upload_{key}")
-                    ]])
+                    reply_markup=InlineKeyboardMarkup([
+                        [InlineKeyboardButton("🔍 Search Again", switch_inline_query=q)],
+                        [InlineKeyboardButton("🌐 Goto Website", url=link)],
+                        [InlineKeyboardButton("⬇️ Get Subtitle File", url=f"https://t.me/{me.username}?start=upload_{key}")]
+                                                       ])
                 )
             )
 
