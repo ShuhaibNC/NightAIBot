@@ -1,4 +1,4 @@
-FROM shuhaib/python:latest
+FROM python:latest
 
 WORKDIR /app/
 
