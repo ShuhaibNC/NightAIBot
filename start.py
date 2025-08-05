@@ -14,9 +14,6 @@ plugins = dict(root='plugins')
 # Web server for route integration
 
 async def start_streamer():
-    # Use env vars: IN and OUT (set from outside or load them here)
-    os.environ['IN'] = "https://segment.yuppcdn.net/110322/channel24/playlist.m3u8"
-    os.environ['OUT'] = "rtmps://dc5-1.rtmp.t.me/s/1666122378:RxvW87rHe6xQPT4FbWTvYQ"
 
     process = await asyncio.create_subprocess_exec(
         "python3", "streamer.py",
