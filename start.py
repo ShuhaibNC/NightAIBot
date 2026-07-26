@@ -11,26 +11,6 @@ logging.basicConfig(level=logging.INFO)
 
 plugins = dict(root='plugins')
 
-# Web server for route integration
-
-async def start_streamer():
-
-    process = await asyncio.create_subprocess_exec(
-        "python3", "streamer.py",
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-    )
-
-    # Optional: log stdout/stderr
-    async def log_output(stream, name):
-        while True:
-            line = await stream.readline()
-            if not line:
-                break
-            print(f"[{name}] {line.decode().rstrip()}")
-
-    asyncio.create_task(log_output(process.stdout, "STDOUT"))
-    asyncio.create_task(log_output(process.stderr, "STDERR"))
 
 async def web_server():
     web_app = web.Application(client_max_size=30000000)
@@ -42,11 +22,10 @@ web_app = loop.run_until_complete(web_server())
 web_runner = web.AppRunner(web_app)
 loop.run_until_complete(web_runner.setup())
 loop.create_task(web.TCPSite(web_runner, "0.0.0.0", 8080).start())
-loop.create_task(start_streamer())
 
 
 Client(
-    'NightAIBot',
+    'Msonedlbot',
     api_id=config.API_ID,
     api_hash=config.API_HASH,
     bot_token=config.BOT_TOKEN,
