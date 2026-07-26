@@ -3,6 +3,7 @@ import random
 import string
 import bs4
 import re
+import logging
 
 def gen_pass():
         adjresp = requests.get("https://gist.githubusercontent.com/hugsy/8910dc78d208e40de42deb29e62df913/raw/eec99c5597a73f6a9240cab26965a8609fa0f6ea/english-adjectives.txt")
@@ -23,17 +24,17 @@ async def msonescrap(query, key):
         "Referer": "https://google.com"
     }
 
-    print("\n========== MSONE SCRAPER DEBUG ==========")
-    print(f"[DEBUG] Original query : {query!r}")
-    print(f"[DEBUG] Requested key  : {key!r}")
+    logging.debug("========== MSONE SCRAPER ==========")
+    logging.debug("Original query: %r", query)
+    logging.debug("Requested key: %r", key)
 
     if " " in query:
         query = query.replace(" ", "+")
 
-    print(f"[DEBUG] Modified query : {query!r}")
+    logging.debug("Modified query: %r", query)
 
     url = f"https://malayalamsubtitles.org/?s={query}"
-    print(f"[DEBUG] Request URL    : {url}")
+    logging.debug("Request URL: %s", url)
 
     try:
         resp = requests.get(
@@ -42,39 +43,59 @@ async def msonescrap(query, key):
             timeout=10
         )
 
-        print(f"[DEBUG] Status code    : {resp.status_code}")
-        print(f"[DEBUG] Final URL      : {resp.url}")
-        print(f"[DEBUG] Response size : {len(resp.content)} bytes")
-        print(f"[DEBUG] Content-Type  : {resp.headers.get('Content-Type')}")
-        print(f"[DEBUG] Encoding      : {resp.encoding}")
+        logging.debug("Status code: %s", resp.status_code)
+        logging.debug("Final URL: %s", resp.url)
+        logging.debug("Response size: %d bytes", len(resp.content))
+        logging.debug("Content-Type: %s", resp.headers.get("Content-Type"))
+        logging.debug("Encoding: %s", resp.encoding)
 
-        # Useful for detecting 403/404/500/etc.
         resp.raise_for_status()
 
         soup = bs4.BeautifulSoup(resp.text, "html.parser")
 
-        print(f"[DEBUG] Page title     : {soup.title.string.strip() if soup.title and soup.title.string else 'NO TITLE'}")
+        page_title = (
+            soup.title.string.strip()
+            if soup.title and soup.title.string
+            else "NO TITLE"
+        )
 
-    except requests.exceptions.Timeout as e:
-        print(f"[ERROR] Request timed out: {e}")
-        print("[DEBUG] Returning: Nothing")
+        logging.debug("Page title: %s", page_title)
+
+    except requests.exceptions.Timeout:
+        logging.exception(
+            "MSONE request timed out | query=%r | url=%s",
+            query,
+            url
+        )
+        logging.debug("Returning: Nothing")
         return "Nothing"
 
-    except requests.exceptions.RequestException as e:
-        print(f"[ERROR] Request failed: {type(e).__name__}: {e}")
-        print("[DEBUG] Returning: Nothing")
+    except requests.exceptions.RequestException:
+        logging.exception(
+            "MSONE HTTP request failed | query=%r | url=%s",
+            query,
+            url
+        )
+        logging.debug("Returning: Nothing")
         return "Nothing"
 
-    except Exception as e:
-        print(f"[ERROR] Parsing/request unexpected error: {type(e).__name__}: {e}")
-        print("[DEBUG] Returning: Nothing")
+    except Exception:
+        logging.exception(
+            "Unexpected MSONE request/parsing error | query=%r | url=%s",
+            query,
+            url
+        )
+        logging.debug("Returning: Nothing")
         return "Nothing"
 
     try:
         if key == "link":
             title_links = soup.select("h2.entry-title a")
 
-            print(f"[DEBUG] Found title links: {len(title_links)}")
+            logging.debug(
+                "Found %d elements using selector: h2.entry-title a",
+                len(title_links)
+            )
 
             resultlist = [
                 link.get("href")
@@ -82,13 +103,16 @@ async def msonescrap(query, key):
                 if link.get("href")
             ]
 
-            print(f"[DEBUG] Extracted links: {len(resultlist)}")
-            print(f"[DEBUG] Links: {resultlist}")
+            logging.debug("Extracted %d links", len(resultlist))
+            logging.debug("Links: %s", resultlist)
 
             if not resultlist:
-                print("[WARNING] No links found")
-                print("[DEBUG] Selector used: h2.entry-title a")
-                print("[DEBUG] Returning: Nothing")
+                logging.warning(
+                    "No MSONE links found | query=%r | status=%s | url=%s",
+                    query,
+                    resp.status_code,
+                    resp.url
+                )
                 return "Nothing"
 
             return resultlist
@@ -96,20 +120,25 @@ async def msonescrap(query, key):
         elif key == "title":
             total_titles = soup.select("h2.entry-title a")
 
-            print(f"[DEBUG] Found title elements: {len(total_titles)}")
+            logging.debug(
+                "Found %d title elements",
+                len(total_titles)
+            )
 
             resultlist = [
                 title.text.strip()
                 for title in total_titles
             ]
 
-            print(f"[DEBUG] Extracted titles: {len(resultlist)}")
-            print(f"[DEBUG] Titles: {resultlist}")
+            logging.debug("Extracted %d titles", len(resultlist))
+            logging.debug("Titles: %s", resultlist)
 
             if not resultlist:
-                print("[WARNING] No titles found")
-                print("[DEBUG] Selector used: h2.entry-title a")
-                print("[DEBUG] Returning: Nothing")
+                logging.warning(
+                    "No MSONE titles found | query=%r | status=%s",
+                    query,
+                    resp.status_code
+                )
                 return "Nothing"
 
             return resultlist
@@ -117,7 +146,7 @@ async def msonescrap(query, key):
         elif key == "thumb":
             articles = soup.select("article.entry")
 
-            print(f"[DEBUG] Found articles: {len(articles)}")
+            logging.debug("Found %d article elements", len(articles))
 
             image_links = []
 
@@ -126,32 +155,52 @@ async def msonescrap(query, key):
 
                 if img:
                     src = img.get("src")
-                    print(f"[DEBUG] Article #{i}: img src={src!r}")
+
+                    logging.debug(
+                        "Article #%d image src: %r",
+                        i,
+                        src
+                    )
 
                     if src:
                         image_links.append(src)
                 else:
-                    print(f"[DEBUG] Article #{i}: No <img> found")
+                    logging.debug(
+                        "Article #%d has no image",
+                        i
+                    )
 
-            print(f"[DEBUG] Extracted thumbnails: {len(image_links)}")
-            print(f"[DEBUG] Thumbnails: {image_links}")
+            logging.debug(
+                "Extracted %d thumbnails",
+                len(image_links)
+            )
+            logging.debug("Thumbnails: %s", image_links)
 
             if not image_links:
-                print("[WARNING] No thumbnails found")
-                print("[DEBUG] Returning: Nothing")
+                logging.warning(
+                    "No MSONE thumbnails found | query=%r | status=%s",
+                    query,
+                    resp.status_code
+                )
                 return "Nothing"
 
             return image_links
 
         else:
-            print(f"[ERROR] Unknown key: {key!r}")
-            print("[DEBUG] Valid keys: link, title, thumb")
-            print("[DEBUG] Returning: Nothing")
+            logging.error(
+                "Invalid MSONE scraper key: %r | query=%r",
+                key,
+                query
+            )
             return "Nothing"
 
-    except Exception as e:
-        print(f"[ERROR] Extraction failed: {type(e).__name__}: {e}")
-        print("[DEBUG] Returning: Nothing")
+    except Exception:
+        logging.exception(
+            "MSONE extraction failed | query=%r | key=%r | url=%s",
+            query,
+            key,
+            resp.url
+        )
         return "Nothing"
     
     
