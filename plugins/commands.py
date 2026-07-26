@@ -39,9 +39,12 @@ async def start(client, message):
         try:
             resp = requests.get(link, headers=headers, timeout=10)
             soup = bs4.BeautifulSoup(resp.text, 'html.parser')
-            dl_btn = soup.select_one("a#download-button")
+            dl_btn = soup.select_one("a#review-button")
             if dl_btn:
-                real_url = dl_btn.get("data-downloadurl")
+                soup2 = dl_btn.get("onclick", "")
+                match = re.search(r"window\.location\.href=['\"]([^'\"]+)['\"]", soup2)
+                if match:
+                    real_url = match.group(1)
             else:
                 await k.edit("Download link not found.")
         except Exception as e:
@@ -72,7 +75,7 @@ async def start(client, message):
         await asyncio.sleep(1)
         await thunder.delete()
         button = [
-        [InlineKeyboardButton('Menu 🌌', callback_data='help')]]
+        [InlineKeyboardButton('Search Inline 🔍', switch_inline_query_current_chat="")]]
         reply_markup = InlineKeyboardMarkup(button)
         await message.reply(Script.START_TEXT, reply_markup=reply_markup, quote=True, parse_mode=enums.ParseMode.HTML)
                 

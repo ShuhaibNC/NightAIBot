@@ -61,10 +61,16 @@ JOKE COMMANDS:<blockquote expandable>
 """
 
 START_TEXT = """
-It's NightAI Bot 🤖
-<pre>A failed attempt of multipurpose experimental bot</pre>
+It's Msone Subtitle Downloader Bot 🤖
+<pre>Download malayalam subtitles SRT/ZIP file from msone website.</pre>
 
-For help hit /help
+<b>USAGE:</b>\n<code>/msone Titanic</code>
+
+<b>Official Website</b>: 
+<code>https://malayalamsubtitles.org/</code>
+
+This bot is not affiliated with Official MSONE Group.
+For help hit /help or /msone
 """
 
 ID_TEXT = """
@@ -78,17 +84,17 @@ ID_TEXT = """
 
 STATUS_TXT = """<b>
 
-👤 Total Users: <code>{}</code>
+👤 Total Users: <code>13535</code>
 
-🗄️ Server: <code>Koyeb</code>
+🗄️ Server: <code>AWS</code>
 
-💾 Memory: <code>2GB</code>
+💾 Memory: <code>64GB</code>
 
 🖥️ CPU: <code>8 Cores Xeon</code>
 
-🌐 Uptime: <code>69.99%</code>
+🌐 Uptime: <code>99.99%</code>
 
-🧩 Bot Version: <code>v0.1.1</code>
+🧩 Bot Version: <code>v1.2.5</code>
 </b>
 
 """

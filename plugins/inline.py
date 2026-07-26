@@ -66,8 +66,8 @@ async def process_msone_inline(bot, query: InlineQuery, q: str):
                     ),
                     reply_markup=InlineKeyboardMarkup([
                         [InlineKeyboardButton("🔍 Search Again", switch_inline_query=q)],
-                        [InlineKeyboardButton("🌐 Goto Website", url=link)],
-                        [InlineKeyboardButton("⬇️ Get Subtitle File", url=f"https://t.me/{me.username}?start=upload_{key}")]
+                        [InlineKeyboardButton("🌐 Goto Download Page", url=link)],
+                        [InlineKeyboardButton("⬇️ Download Now", url=f"https://t.me/{me.username}?start=upload_{key}")]
                                                        ])
                 )
             )
