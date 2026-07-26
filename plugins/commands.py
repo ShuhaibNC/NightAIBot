@@ -16,7 +16,15 @@ from gtts import gTTS
 import math
 from plugins.newton import math_request
 
-headers = {"User-Agent": "Mozilla/5.0"}
+headers = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/150.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
 
 link_dict = {}
 
@@ -334,9 +342,14 @@ async def msone(bot, message):
     download_links = []
 
     headers = {
-        "User-Agent": "Mozilla/5.0",
-        "Referer": "https://google.com"
-    }
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/150.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
 
     titles = await msonescrap(cmd, 'title')
     links = await msonescrap(cmd, 'link')
@@ -363,8 +376,13 @@ async def github(bot, message):
     res = await message.reply('Searching...', quote=True)
     username = message.text.split(' ', 1)[1]
     headers = {
-    "User-Agent": "Mozilla/5.0",
-    "Referer": "https://google.com"
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/150.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
 }
     usr = requests.get(f'https://api.github.com/users/{username}', headers=headers).json()
     if usr.get('login'):
@@ -402,8 +420,13 @@ async def lyrics(bot, update):
     k = await update.reply(f'Searching for {query}...', parse_mode=enums.ParseMode.HTML)
     
     headers = {
-    "User-Agent": "Mozilla/5.0",
-    "Referer": "https://google.com"
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/150.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
 }
 
     res = requests.get(f'https://lrclib.net//api/search?q={html.escape(query)}', headers=headers)
