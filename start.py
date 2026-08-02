@@ -7,7 +7,7 @@ from route import routes
 import os
 import asyncio
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 plugins = dict(root='plugins')
 
