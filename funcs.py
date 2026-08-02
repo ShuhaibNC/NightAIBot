@@ -15,214 +15,100 @@ def gen_pass():
         passw = adj + noun + num + punct
         return passw
 
-
-async def msonescrap(query, key):
-    resultlist = []
-
+def msonescrap(query, key):
     headers = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/131.0.0.0 Safari/537.36"
-    ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Connection": "keep-alive",
-    "Upgrade-Insecure-Requests": "1",
-    "Sec-Fetch-Dest": "document",
-    "Sec-Fetch-Mode": "navigate",
-    "Sec-Fetch-Site": "none",
-    "Sec-Fetch-User": "?1",
-    "sec-ch-ua": '"Chromium";v="131", "Not_A Brand";v="24", "Google Chrome";v="131"',
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": '"Windows"',
-    "Cache-Control": "max-age=0",
-}
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/138.0.0.0 Safari/537.36"
+        ),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+    }
 
     session = requests.Session()
     session.headers.update(headers)
 
-
     logging.debug("========== MSONE SCRAPER ==========")
-    logging.debug("Original query: %r", query)
-    logging.debug("Requested key: %r", key)
+    logging.debug("Query: %s", query)
+    logging.debug("Key: %s", key)
 
-    if " " in query:
-        query = query.replace(" ", "+")
-
-    logging.debug("Modified query: %r", query)
-
-    url = f"https://malayalamsubtitles.org/?s={query}"
-    logging.debug("Request URL: %s", url)
+    url = "https://malayalamsubtitles.org/"
+    params = {"s": query}
 
     try:
         resp = session.get(
             url,
-            headers=headers,
-            timeout=10
+            params=params,
+            timeout=15,
+            allow_redirects=True,
         )
 
-        logging.debug("Status code: %s", resp.status_code)
-        logging.debug("Final URL: %s", resp.url)
-        logging.debug("Response size: %d bytes", len(resp.content))
+        logging.debug("Status: %s", resp.status_code)
+        logging.debug("URL: %s", resp.url)
+        logging.debug("Server: %s", resp.headers.get("Server"))
         logging.debug("Content-Type: %s", resp.headers.get("Content-Type"))
-        logging.debug("Encoding: %s", resp.encoding)
 
-        resp.raise_for_status()
+        # Save HTML for debugging
+        # with open("debug.html", "w", encoding="utf-8") as f:
+        #     f.write(resp.text)
+
+        if resp.status_code != 200:
+            logging.error("HTTP %s", resp.status_code)
+            logging.debug(resp.text[:1000])
+            return "Nothing"
 
         soup = bs4.BeautifulSoup(resp.text, "html.parser")
 
-        page_title = (
-            soup.title.string.strip()
-            if soup.title and soup.title.string
-            else "NO TITLE"
-        )
-
-        logging.debug("Page title: %s", page_title)
-
-    except requests.exceptions.Timeout:
-        logging.exception(
-            "MSONE request timed out | query=%r | url=%s",
-            query,
-            url
-        )
-        logging.debug("Returning: Nothing")
-        return "Nothing"
-
     except requests.exceptions.RequestException:
-        logging.exception(
-            "MSONE HTTP request failed | query=%r | url=%s",
-            query,
-            url
-        )
-        logging.debug("Returning: Nothing")
-        return "Nothing"
-
-    except Exception:
-        logging.exception(
-            "Unexpected MSONE request/parsing error | query=%r | url=%s",
-            query,
-            url
-        )
-        logging.debug("Returning: Nothing")
+        logging.exception("Request failed")
         return "Nothing"
 
     try:
         if key == "link":
-            title_links = soup.select("h2.entry-title a")
-
-            logging.debug(
-                "Found %d elements using selector: h2.entry-title a",
-                len(title_links)
-            )
-
-            resultlist = [
-                link.get("href")
-                for link in title_links
-                if link.get("href")
+            results = [
+                a["href"]
+                for a in soup.select("h2.entry-title a[href]")
             ]
-
-            logging.debug("Extracted %d links", len(resultlist))
-            logging.debug("Links: %s", resultlist)
-
-            if not resultlist:
-                logging.warning(
-                    "No MSONE links found | query=%r | status=%s | url=%s",
-                    query,
-                    resp.status_code,
-                    resp.url
-                )
-                return "Nothing"
-
-            return resultlist
 
         elif key == "title":
-            total_titles = soup.select("h2.entry-title a")
-
-            logging.debug(
-                "Found %d title elements",
-                len(total_titles)
-            )
-
-            resultlist = [
-                title.text.strip()
-                for title in total_titles
+            results = [
+                a.get_text(strip=True)
+                for a in soup.select("h2.entry-title a")
             ]
 
-            logging.debug("Extracted %d titles", len(resultlist))
-            logging.debug("Titles: %s", resultlist)
-
-            if not resultlist:
-                logging.warning(
-                    "No MSONE titles found | query=%r | status=%s",
-                    query,
-                    resp.status_code
-                )
-                return "Nothing"
-
-            return resultlist
-
         elif key == "thumb":
-            articles = soup.select("article.entry")
+            results = []
 
-            logging.debug("Found %d article elements", len(articles))
-
-            image_links = []
-
-            for i, article in enumerate(articles):
+            for article in soup.select("article.entry"):
                 img = article.select_one("img")
 
-                if img:
-                    src = img.get("src")
+                if not img:
+                    continue
 
-                    logging.debug(
-                        "Article #%d image src: %r",
-                        i,
-                        src
-                    )
-
-                    if src:
-                        image_links.append(src)
-                else:
-                    logging.debug(
-                        "Article #%d has no image",
-                        i
-                    )
-
-            logging.debug(
-                "Extracted %d thumbnails",
-                len(image_links)
-            )
-            logging.debug("Thumbnails: %s", image_links)
-
-            if not image_links:
-                logging.warning(
-                    "No MSONE thumbnails found | query=%r | status=%s",
-                    query,
-                    resp.status_code
+                src = (
+                    img.get("src")
+                    or img.get("data-src")
+                    or img.get("data-lazy-src")
                 )
-                return "Nothing"
 
-            return image_links
+                if src:
+                    results.append(src)
 
         else:
-            logging.error(
-                "Invalid MSONE scraper key: %r | query=%r",
-                key,
-                query
-            )
+            logging.error("Invalid key: %s", key)
             return "Nothing"
 
+        logging.debug("Found %d results", len(results))
+
+        if not results:
+            return "Nothing"
+
+        return results
+
     except Exception:
-        logging.exception(
-            "MSONE extraction failed | query=%r | key=%r | url=%s",
-            query,
-            key,
-            resp.url
-        )
-        return "Nothing"
-    
+        logging.exception("Parsing failed")
+        return "Nothing"    
     
 async def remove_duplicates(titles, links):
     unique_titles = []

@@ -34,33 +34,22 @@ async def inline_handler(bot, query: InlineQuery):
 
 async def process_msone_inline(bot, query: InlineQuery, q: str):
     headers = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/131.0.0.0 Safari/537.36"
-    ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Connection": "keep-alive",
-    "Upgrade-Insecure-Requests": "1",
-    "Sec-Fetch-Dest": "document",
-    "Sec-Fetch-Mode": "navigate",
-    "Sec-Fetch-Site": "none",
-    "Sec-Fetch-User": "?1",
-    "sec-ch-ua": '"Chromium";v="131", "Not_A Brand";v="24", "Google Chrome";v="131"',
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": '"Windows"',
-    "Cache-Control": "max-age=0",
-}
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/138.0.0.0 Safari/537.36"
+            ),
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+        }
 
     session = requests.Session()
     session.headers.update(headers)
 
 
-    titles = await msonescrap(q, 'title')
-    links = await msonescrap(q, 'link')
-    thumbs = await msonescrap(q, 'thumb')
+    titles = msonescrap(q, 'title')
+    links = msonescrap(q, 'link')
+    thumbs = msonescrap(q, 'thumb')
     me = await bot.get_me()
     if titles == 'Nothing' or links == 'Nothing':
         return await query.answer([
