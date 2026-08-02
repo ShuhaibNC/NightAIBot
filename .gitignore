@@ -14,3 +14,7 @@ NightAIBot.session-shm
 NightAIBot.session-wal
 Msonedlbot.session
 debug.html
+Msonedlbot.session-shm
+.gitignore
+Msonedlbot.session-wal
+.gitignore

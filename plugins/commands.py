@@ -42,32 +42,80 @@ async def ping(client, message):
                 await m.edit(f'Pong!\n{elapsed_time:.3f}ms')
                 
 #start
-@Client.on_message(filters.command('start'))
+@Client.on_message(filters.command("start"))
 async def start(client, message):
     if len(message.command) > 1 and message.command[1].startswith("upload_"):
-        k = await message.reply("Fetching Download link...")
+
+        await message.reply("Fetching download link...")
+
         key = message.command[1][7:]
         link = link_dict.get(key)
+
+        if not link:
+            await message.reply("Invalid or expired download link.")
+            return
+
+        real_url = None
+        filename = None
+
         try:
-            resp = session.get(link, headers=headers, timeout=10)
-            soup = bs4.BeautifulSoup(resp.text, 'html.parser')
+            resp = session.get(
+                link,
+                timeout=15,
+                allow_redirects=True
+            )
+            resp.raise_for_status()
+
+            soup = bs4.BeautifulSoup(resp.text, "html.parser")
+
             dl_btn = soup.select_one("a#review-button")
-            if dl_btn:
-                soup2 = dl_btn.get("onclick", "")
-                match = re.search(r"window\.location\.href=['\"]([^'\"]+)['\"]", soup2)
-                if match:
-                    real_url = match.group(1)
-            else:
-                await k.edit("Download link not found.")
+
+            if not dl_btn:
+                await message.reply("Download button not found.")
+                return
+
+            onclick = dl_btn.get("onclick", "")
+
+            match = re.search(
+                r"window\.location\.href=['\"]([^'\"]+)['\"]",
+                onclick
+            )
+
+            if not match:
+                await message.reply("Unable to extract download link.")
+                return
+
+            real_url = match.group(1)
+
         except Exception as e:
-            await k.edit(f"Error fetching download link: {e}")
+            await message.reply(f"Failed to fetch download link.\n\n{e}")
+            return
+
         try:
-            await k.edit("Downloading file...")
-            response = session.get(real_url, stream=True, headers=headers, timeout=10)
-            filename = await sanitize_filename(await get_filename_from_cd(response) or f"file_{key}.srt")
-            await k.edit(f"Uploading: <code>{filename}</code>")
+            await message.reply("Downloading file...")
+
+            response = session.get(
+                real_url,
+                stream=True,
+                timeout=30,
+                allow_redirects=True
+            )
+
+            response.raise_for_status()
+
+            filename = await sanitize_filename(
+                await get_filename_from_cd(response)
+                or f"file_{key}.srt"
+            )
+
+            await message.reply(
+                f"Uploading:\n<code>{filename}</code>"
+            )
+
             with open(filename, "wb") as f:
-                f.write(response.content)
+                for chunk in response.iter_content(8192):
+                    if chunk:
+                        f.write(chunk)
 
             await client.send_document(
                 chat_id=message.from_user.id,
@@ -75,22 +123,32 @@ async def start(client, message):
                 caption=f"📁 Filename : <code>{filename}</code>",
                 parse_mode=enums.ParseMode.HTML
             )
-            time.sleep(2)
-            await k.delete()
+
         except Exception as e:
-            await k.edit(f"Failed to upload the file.\n {e}")
+            await message.reply(f"Failed to download/upload the file.\n\n{e}")
+
         finally:
-            if os.path.exists(filename):
-                os.remove(filename)  # clean up
+            if filename and os.path.exists(filename):
+                os.remove(filename)
+
     else:
-        thunder = await message.reply('⚡')
+        thunder = await message.reply("⚡")
         await asyncio.sleep(1)
         await thunder.delete()
-        button = [
-        [InlineKeyboardButton('Search Inline 🔍', switch_inline_query_current_chat="")]]
-        reply_markup = InlineKeyboardMarkup(button)
-        await message.reply(Script.START_TEXT, reply_markup=reply_markup, quote=True, parse_mode=enums.ParseMode.HTML)
-                
+
+        button = [[
+            InlineKeyboardButton(
+                "Search Inline 🔍",
+                switch_inline_query_current_chat=""
+            )
+        ]]
+
+        await message.reply(
+            Script.START_TEXT,
+            reply_markup=InlineKeyboardMarkup(button),
+            quote=True,
+            parse_mode=enums.ParseMode.HTML
+        )
 #help
 @Client.on_message(filters.command('help') & filters.incoming)
 async def help(client, message):
