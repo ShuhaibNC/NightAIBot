@@ -20,11 +20,26 @@ headers = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/150.0.0.0 Safari/537.36"
+        "Chrome/131.0.0.0 Safari/537.36"
     ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+    "sec-ch-ua": '"Chromium";v="131", "Not_A Brand";v="24", "Google Chrome";v="131"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
+    "Cache-Control": "max-age=0",
 }
+
+session = requests.Session()
+session.headers.update(headers)
+
 
 link_dict = {}
 
@@ -45,7 +60,7 @@ async def start(client, message):
         key = message.command[1][7:]
         link = link_dict.get(key)
         try:
-            resp = requests.get(link, headers=headers, timeout=10)
+            resp = session.get(link, headers=headers, timeout=10)
             soup = bs4.BeautifulSoup(resp.text, 'html.parser')
             dl_btn = soup.select_one("a#review-button")
             if dl_btn:
@@ -59,7 +74,7 @@ async def start(client, message):
             await k.edit(f"Error fetching download link: {e}")
         try:
             await k.edit("Downloading file...")
-            response = requests.get(real_url, stream=True, headers=headers, timeout=10)
+            response = session.get(real_url, stream=True, headers=headers, timeout=10)
             filename = await sanitize_filename(await get_filename_from_cd(response) or f"file_{key}.srt")
             await k.edit(f"Uploading: <code>{filename}</code>")
             with open(filename, "wb") as f:
@@ -345,11 +360,26 @@ async def msone(bot, message):
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/150.0.0.0 Safari/537.36"
+        "Chrome/131.0.0.0 Safari/537.36"
     ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+    "sec-ch-ua": '"Chromium";v="131", "Not_A Brand";v="24", "Google Chrome";v="131"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
+    "Cache-Control": "max-age=0",
 }
+
+    session = requests.Session()
+    session.headers.update(headers)
+
 
     titles = await msonescrap(cmd, 'title')
     links = await msonescrap(cmd, 'link')
@@ -379,12 +409,27 @@ async def github(bot, message):
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/150.0.0.0 Safari/537.36"
+        "Chrome/131.0.0.0 Safari/537.36"
     ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+    "sec-ch-ua": '"Chromium";v="131", "Not_A Brand";v="24", "Google Chrome";v="131"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
+    "Cache-Control": "max-age=0",
 }
-    usr = requests.get(f'https://api.github.com/users/{username}', headers=headers).json()
+
+    session = requests.Session()
+    session.headers.update(headers)
+
+    usr = session.get(f'https://api.github.com/users/{username}', headers=headers).json()
     if usr.get('login'):
         reply_text = f"""<b>Name:</b> <code>{usr.get('name') or 'N/A'}</code>
 <b>Username:</b> <code>{usr['login']}</code>
@@ -423,13 +468,28 @@ async def lyrics(bot, update):
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/150.0.0.0 Safari/537.36"
+        "Chrome/131.0.0.0 Safari/537.36"
     ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+    "sec-ch-ua": '"Chromium";v="131", "Not_A Brand";v="24", "Google Chrome";v="131"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
+    "Cache-Control": "max-age=0",
 }
 
-    res = requests.get(f'https://lrclib.net//api/search?q={html.escape(query)}', headers=headers)
+    session = requests.Session()
+    session.headers.update(headers)
+
+
+    res = session.get(f'https://lrclib.net//api/search?q={html.escape(query)}', headers=headers)
     try:
         lyric = json.loads(res.text)[0]['plainLyrics']
     except (json.JSONDecodeError, IndexError):
@@ -515,7 +575,7 @@ async def ud(bot, message):
     if len(message.command) < 2:
             return await message.reply("<b>Example:</b>\n<code>/ud incel</code>", quote=True)
     text = message.text.split(" ", 1)[1]
-    results = requests.get(f'http://api.urbandictionary.com/v0/define?term={text}').json()
+    results = session.get(f'http://api.urbandictionary.com/v0/define?term={text}').json()
     try:
         reply_text = f'<b>📝 Word: {text}</b>\n\n<b>ℹ️ Definition</b>\n{results["list"][0]["definition"]}\n\n<b>📌 Example</b>\n<i>{results["list"][0]["example"]}</i>'
     except:
