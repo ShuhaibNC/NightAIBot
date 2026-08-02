@@ -50,8 +50,8 @@ def msonescrap(query, key):
         logging.debug("Content-Type: %s", resp.headers.get("Content-Type"))
 
         # Save HTML for debugging
-        # with open("debug.html", "w", encoding="utf-8") as f:
-        #     f.write(resp.text)
+        with open("debug.html", "w", encoding="utf-8") as f:
+            f.write(resp.text)
 
         if resp.status_code != 200:
             logging.error("HTTP %s", resp.status_code)
